@@ -1,0 +1,165 @@
+{
+  "app": {
+    "name": "Your Guide",
+    "tagline": "For the moment you want to give up."
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "later": "Later",
+    "back": "Back",
+    "next": "Next",
+    "continue": "Continue",
+    "done": "Done",
+    "loading": "Loading",
+    "retry": "Try again",
+    "delete": "Delete",
+    "archive": "Archive",
+    "unarchive": "Unarchive",
+    "close": "Close",
+    "optional": "optional",
+    "logout": "Log out",
+    "language": "Language",
+    "languageName": "English",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "skipToContent": "Skip to content",
+    "errorTitle": "Something went wrong"
+  },
+  "nav": {
+    "home": "Home",
+    "goals": "Goals",
+    "progress": "Progress",
+    "settings": "Settings",
+    "struggling": "I'm struggling"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 8 characters.",
+    "login": {
+      "title": "Welcome back",
+      "intro": "Log in to pick up where you left off.",
+      "submit": "Log in",
+      "noAccount": "New here?",
+      "toRegister": "Create an account"
+    },
+    "register": {
+      "title": "Start with you",
+      "intro": "A few short questions about you come first. Your first goal comes after.",
+      "submit": "Create account",
+      "hasAccount": "Already have an account?",
+      "toLogin": "Log in instead",
+      "privacy": "The app never diagnoses, scores or labels you. Your answers stay yours."
+    }
+  },
+  "errors": {
+    "auth": {
+      "not_logged_in": "Please log in to continue.",
+      "invalid_credentials": "That email and password don't match.",
+      "email_taken": "An account with this email already exists."
+    },
+    "rate_limited": "Too many attempts. Try again in a minute.",
+    "validation": {
+      "failed": "Some fields need attention."
+    },
+    "bad_request": "Something went wrong. Please try again.",
+    "not_found": "Something went wrong. Please try again.",
+    "profile": {
+      "onboarding_not_done": "A few questions come first. Let's finish them.",
+      "screen_not_saved": "This part hasn't been saved yet."
+    },
+    "goal": {
+      "onboarding_required": "A few questions come before the first goal.",
+      "not_found": "That goal no longer exists. The list has been refreshed.",
+      "has_work_history": "This goal has work history. Archive it instead of deleting it.",
+      "archived": "This goal is archived. Unarchive it to make changes.",
+      "session_running": "A session is open under this goal. Review it first."
+    },
+    "task": {
+      "not_found": "That task no longer exists. The list has been refreshed.",
+      "has_work_history": "This task has sessions behind it and keeps your progress, so it can't be deleted."
+    },
+    "step": {
+      "not_found": "That step no longer exists. The list has been refreshed.",
+      "has_work_history": "This step has sessions behind it and keeps your progress, so it can't be deleted.",
+      "order_mismatch": "The steps changed in the meantime. The list has been reloaded, please try again."
+    },
+    "session": {
+      "not_found": "That session was already reviewed.",
+      "already_active": "A session is already open.",
+      "step_done": "This step is already done. Mark it not done to work on it again.",
+      "none_active": "No open session.",
+      "not_running": "This session is no longer running."
+    },
+    "struggle": {
+      "not_found": "That entry no longer exists.",
+      "onboarding_required": "A few questions come first. Let's finish them.",
+      "already_answered": "This one was already answered."
+    },
+    "ai": {
+      "daily_limit": "Today's advice is used up. It comes back tomorrow.",
+      "unavailable": "Not available right now. Try again in a minute."
+    },
+    "unknown": "Something went wrong. Please try again.",
+    "network": "Can't reach the server. Check your connection and try again."
+  },
+  "validation": {
+    "default": "Please check this field.",
+    "isEmail": "Enter a valid email address.",
+    "isString": "Enter some text.",
+    "minLength": "This can't be empty.",
+    "maxLength": "This is longer than allowed.",
+    "isIn": "Choose one of the options.",
+    "isInt": "Enter a whole number.",
+    "min": "This is below the minimum.",
+    "max": "This is above the maximum.",
+    "isBoolean": "Choose yes or no.",
+    "isUuid": "Please check this field.",
+    "isTimeZone": "Please check this field.",
+    "isArray": "Please check this field.",
+    "arrayMinSize": "Choose a few more.",
+    "arrayMaxSize": "That's more than allowed.",
+    "arrayUnique": "Each one can be chosen once.",
+    "matches": "This doesn't match the expected format.",
+    "whitelistValidation": "Please check this field.",
+    "required": "This is required.",
+    "passwordLength": "Use at least 8 characters.",
+    "tooLong": "Keep this under {max} characters."
+  },
+  "onboarding": {
+    "screens": {
+      "basics": "Basics",
+      "situation": "Your days now",
+      "achievements": "What you have done",
+      "patterns": "What gets in the way",
+      "selfView": "How you see yourself",
+      "confidence": "Quick check-in",
+      "values": "What matters to you",
+      "goal": "Your first goal"
+    },
+    "stepOf": "Step {current} of {total}"
+  },
+  "home": {
+    "title": "Home",
+    "placeholder": "The home screen comes with the next slice. For now the foundation works: account, language and the design system.",
+    "styleguide": "Open the style guide",
+    "signedInAs": "Signed in as {email}"
+  },
+  "styleguide": {
+    "title": "Style guide",
+    "intro": "Tokens, type and components of the foundation, rendered from the real theme. For review, not a product screen.",
+    "colors": "Colours",
+    "type": "Type",
+    "components": "Components",
+    "primary": "Primary action",
+    "secondary": "Secondary",
+    "ghost": "Ghost",
+    "destructive": "Destructive",
+    "struggle": "I'm struggling",
+    "sample": "The quick brown fox jumps over the lazy dog.",
+    "sampleAr": "صِف نفسك بصدق. من أنت في هذه المرحلة من حياتك؟"
+  }
+}
