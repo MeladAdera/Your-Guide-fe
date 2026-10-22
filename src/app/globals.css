@@ -1,0 +1,191 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Your Guide colour system, option E "ink and cobalt" (docs/DECISIONS.md).
+  True-grey neutrals, near-black ink, one cobalt for every action, the struggle
+  button in solid ink. Values are sRGB hex derived from OKLCH; every text pair
+  is 4.5:1 or better and every control edge 3:1 or better in both themes.
+*/
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-subtle: var(--subtle);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-success: var(--success);
+  --color-success-ink: var(--success-ink);
+  --color-warning: var(--warning);
+  --font-sans: var(--font-plex), var(--font-plex-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: var(--font-plex-arabic), var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* ground */
+  --background: #f7f8fa;
+  --foreground: #13161b;
+  --card: #ffffff;
+  --card-foreground: #13161b;
+  --popover: #ffffff;
+  --popover-foreground: #13161b;
+  /* text steps: foreground (ink), muted-foreground (ink 2), subtle (ink 3) */
+  --muted: #edeff0;
+  --muted-foreground: #51555c;
+  --subtle: #686c72;
+  --secondary: #edeff0;
+  --secondary-foreground: #13161b;
+  /* the one hue */
+  --primary: #285cc2;
+  --primary-foreground: #ffffff;
+  --accent: #e2ecfd;
+  --accent-foreground: #1346ab;
+  --ring: #285cc2;
+  /* the struggle button: solid ink, no hue */
+  --ink: #13161b;
+  --ink-foreground: #f7f8fa;
+  /* states: green only on done, amber only as an icon, red only destructive */
+  --success: #267b4c;
+  --success-ink: #0a693c;
+  --warning: #b86a28;
+  --destructive: #ab413e;
+  /* lines: border for dividers, input for control edges (3:1) */
+  --border: #d9dbdd;
+  --input: #86898d;
+  /* charts: cobalt, ink, grey; each measure on its own chart */
+  --chart-1: #2e62c9;
+  --chart-2: #2b2e33;
+  --chart-3: #86898f;
+  --chart-4: #b1b4b9;
+  --chart-5: #d9dbdd;
+  --radius: 0.625rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #13161b;
+  --sidebar-primary: #285cc2;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #edeff0;
+  --sidebar-accent-foreground: #13161b;
+  --sidebar-border: #d9dbdd;
+  --sidebar-ring: #285cc2;
+}
+
+.dark {
+  --background: #141619;
+  --foreground: #edeef1;
+  --card: #1e1f22;
+  --card-foreground: #edeef1;
+  --popover: #1e1f22;
+  --popover-foreground: #edeef1;
+  --muted: #27292c;
+  --muted-foreground: #b1b4b9;
+  --subtle: #8c8f94;
+  --secondary: #27292c;
+  --secondary-foreground: #edeef1;
+  --primary: #7daafd;
+  --primary-foreground: #0a111f;
+  --accent: #202e47;
+  --accent-foreground: #9bbeff;
+  --ring: #7daafd;
+  --ink: #edeef1;
+  --ink-foreground: #141619;
+  --success: #68b986;
+  --success-ink: #74c692;
+  --warning: #d9985a;
+  --destructive: #ed8c84;
+  --border: #383b3e;
+  --input: #696c71;
+  --chart-1: #6290e7;
+  --chart-2: #ccced0;
+  --chart-3: #6f7276;
+  --chart-4: #4a4d52;
+  --chart-5: #383b3e;
+  --sidebar: #1e1f22;
+  --sidebar-foreground: #edeef1;
+  --sidebar-primary: #7daafd;
+  --sidebar-primary-foreground: #0a111f;
+  --sidebar-accent: #27292c;
+  --sidebar-accent-foreground: #edeef1;
+  --sidebar-border: #383b3e;
+  --sidebar-ring: #7daafd;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  /* Arabic leads the stack when the page is Arabic, so Latin inside Arabic text matches. */
+  html[lang="ar"] {
+    font-family: var(--font-arabic);
+  }
+  body {
+    @apply bg-background text-foreground;
+    line-height: 1.5;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  /* Tabular digits wherever numbers line up: timers, counts, charts. */
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
