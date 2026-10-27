@@ -25,7 +25,8 @@ export function PasswordInput({ id, className, onKeyDown, onKeyUp, onBlur, "aria
 
   return (
     <div className="grid gap-1.5">
-      <div className="relative">
+      {/* Passwords are typed left to right in every language; the button sits at the field's end. */}
+      <div className="relative" dir="ltr">
         <Input
           id={id}
           type={visible ? "text" : "password"}

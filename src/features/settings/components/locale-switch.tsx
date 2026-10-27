@@ -18,7 +18,7 @@ const LABELS: Record<Locale, string> = { en: "English", ar: "العربية" };
  * The language switch. The new language shows at once (cookie + refresh); when
  * logged in, the account follows with PATCH /api/auth/me (docs/handoff.md §4).
  */
-export function LocaleSwitch({ className }: { className?: string }) {
+export function LocaleSwitch({ className, block, labelledBy }: { className?: string; block?: boolean; labelledBy?: string }) {
   const current = useLocale() as Locale;
   const router = useRouter();
   const user = useOptionalUser();
@@ -37,7 +37,12 @@ export function LocaleSwitch({ className }: { className?: string }) {
   }
 
   return (
-    <div role="group" aria-label={t("common.language")} className={cn("inline-flex rounded-lg border border-input bg-background p-0.5", className)}>
+    <div
+      role="group"
+      aria-label={labelledBy ? undefined : t("common.language")}
+      aria-labelledby={labelledBy}
+      className={cn("rounded-lg border border-input bg-background p-0.5", block ? "grid w-full grid-cols-2" : "inline-flex", className)}
+    >
       {LOCALES.map((locale) => (
         <Button
           key={locale}
@@ -47,7 +52,7 @@ export function LocaleSwitch({ className }: { className?: string }) {
           lang={locale}
           aria-pressed={locale === current}
           onClick={() => choose(locale)}
-          className={cn("h-8 rounded-md px-3", locale === current && "bg-muted text-foreground")}
+          className={cn("rounded-md px-3", block ? "h-10" : "h-8", locale === current && "bg-muted text-foreground")}
         >
           {LABELS[locale]}
         </Button>

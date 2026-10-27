@@ -6,6 +6,7 @@ import { Check, Circle } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useState, useSyncExternalStore } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Field } from "@/components/shared/field";
 import { FormError } from "@/components/shared/form-error";
@@ -15,8 +16,12 @@ import { authApi, browserTimezone } from "@/features/auth/api";
 import { registerSchema, type RegisterValues } from "@/features/auth/schemas";
 import { suggestEmail } from "@/features/auth/email-suggest";
 import { cn } from "@/lib/utils";
+import { LocaleSwitch } from "@/features/settings/components/locale-switch";
 import { PasswordInput } from "./password-input";
+import { TimezoneField } from "./timezone-field";
 import { useAuthForm } from "./use-auth-form";
+
+const noSubscribe = () => () => {};
 
 export function RegisterForm() {
   const t = useTranslations("auth");
@@ -39,6 +44,10 @@ export function RegisterForm() {
   // Offer the fix once the person has left the field, not while typing.
   const suggestion = touchedFields.email ? suggestEmail(email) : null;
   const passwordMet = password.length >= 8;
+  // The browser's zone is only known on the client; null while rendering on the server.
+  const detectedTimezone = useSyncExternalStore(noSubscribe, browserTimezone, () => null);
+  const [chosenTimezone, setChosenTimezone] = useState<string | null>(null);
+  const timezone = chosenTimezone ?? detectedTimezone;
 
   return (
     <form
@@ -46,7 +55,7 @@ export function RegisterForm() {
       className="grid gap-5"
       onSubmit={form.handleSubmit((values) => {
         setFormError(null);
-        register.mutate({ email: values.email, password: values.password, timezone: browserTimezone(), locale });
+        register.mutate({ email: values.email, password: values.password, timezone: timezone ?? browserTimezone(), locale });
       })}
     >
       <FormError error={formError} />
@@ -95,6 +104,13 @@ export function RegisterForm() {
           {passwordMet ? t("passwordMet") : t("passwordHint")}
         </p>
       </Field>
+      <div className="grid gap-1.5">
+        <p id="speaks-label" className="text-sm font-medium">
+          {t("register.speaks")}
+        </p>
+        <LocaleSwitch block labelledBy="speaks-label" />
+      </div>
+      {timezone ? <TimezoneField value={timezone} onChange={setChosenTimezone} /> : null}
       <Button type="submit" size="lg" disabled={register.isPending}>
         {t("register.submit")}
       </Button>

@@ -48,11 +48,20 @@
     },
     "register": {
       "title": "Start with you",
-      "intro": "A few short questions about you come first. Your first goal comes after.",
+      "intro": "Next come seven short questions about you, about six minutes. Your first goal comes after them.",
       "submit": "Create account",
       "hasAccount": "Already have an account?",
       "toLogin": "Log in instead",
-      "privacy": "The app never diagnoses, scores or labels you. Your answers stay yours."
+      "privacy": "The app never diagnoses, scores or labels you. Your answers stay yours.",
+      "roadLabel": "What comes next",
+      "roadAccount": "Account",
+      "roadAboutYou": "About you",
+      "roadFirstGoal": "First goal",
+      "speaks": "The app will speak",
+      "timezone": "Your days follow {zone} time.",
+      "timezoneChange": "Change",
+      "timezoneLabel": "Time zone",
+      "timezoneWhy": "Your day starts and ends by this time zone. It can't be changed later."
     },
     "showPassword": "Show",
     "hidePassword": "Hide",
