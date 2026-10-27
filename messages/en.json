@@ -53,7 +53,15 @@
       "hasAccount": "Already have an account?",
       "toLogin": "Log in instead",
       "privacy": "The app never diagnoses, scores or labels you. Your answers stay yours."
-    }
+    },
+    "showPassword": "Show",
+    "hidePassword": "Hide",
+    "showPasswordLabel": "Show password",
+    "hidePasswordLabel": "Hide password",
+    "capsLock": "Caps Lock is on.",
+    "passwordMet": "At least 8 characters. Done.",
+    "emailSuggest": "Did you mean {email}?",
+    "useSuggestion": "Use it"
   },
   "errors": {
     "auth": {

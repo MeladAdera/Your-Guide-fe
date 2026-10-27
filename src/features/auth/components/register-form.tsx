@@ -2,16 +2,20 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { Check, Circle } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Field } from "@/components/shared/field";
 import { FormError } from "@/components/shared/form-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authApi, browserTimezone } from "@/features/auth/api";
 import { registerSchema, type RegisterValues } from "@/features/auth/schemas";
+import { suggestEmail } from "@/features/auth/email-suggest";
+import { cn } from "@/lib/utils";
+import { PasswordInput } from "./password-input";
 import { useAuthForm } from "./use-auth-form";
 
 export function RegisterForm() {
@@ -29,8 +33,12 @@ export function RegisterForm() {
 
   const next = search.get("next");
   const loginHref = next ? `/login?next=${encodeURIComponent(next)}` : "/login";
-  const { errors } = form.formState;
+  const { errors, touchedFields } = form.formState;
   const emailTaken = errors.email?.message === "auth.email_taken";
+  const [email, password] = useWatch({ control: form.control, name: ["email", "password"] });
+  // Offer the fix once the person has left the field, not while typing.
+  const suggestion = touchedFields.email ? suggestEmail(email) : null;
+  const passwordMet = password.length >= 8;
 
   return (
     <form
@@ -53,6 +61,18 @@ export function RegisterForm() {
           aria-describedby={errors.email ? "email-error" : undefined}
           {...form.register("email")}
         />
+        {suggestion && !emailTaken ? (
+          <p className="text-sm text-muted-foreground">
+            <span dir="auto">{t("emailSuggest", { email: suggestion })}</span>{" "}
+            <button
+              type="button"
+              onClick={() => form.setValue("email", suggestion, { shouldValidate: true, shouldDirty: true })}
+              className="font-medium text-primary underline underline-offset-4"
+            >
+              {t("useSuggestion")}
+            </button>
+          </p>
+        ) : null}
         {emailTaken ? (
           <p id="email-error" role="alert" className="text-sm text-destructive">
             {te("auth.email_taken")}{" "}
@@ -62,16 +82,18 @@ export function RegisterForm() {
           </p>
         ) : null}
       </Field>
-      <Field id="password" label={t("password")} why={t("passwordHint")} error={errors.password?.message}>
-        <Input
+      <Field id="password" label={t("password")} error={errors.password?.message}>
+        <PasswordInput
           id="password"
-          type="password"
           autoComplete="new-password"
-          dir="ltr"
           aria-invalid={!!errors.password}
-          aria-describedby={errors.password ? "password-error" : "password-why"}
+          aria-describedby={errors.password ? "password-error password-rule" : "password-rule"}
           {...form.register("password")}
         />
+        <p id="password-rule" aria-live="polite" className={cn("flex items-center gap-1.5 text-sm", passwordMet ? "text-success-ink" : "text-muted-foreground")}>
+          {passwordMet ? <Check aria-hidden className="size-4" strokeWidth={2.5} /> : <Circle aria-hidden className="size-3.5" />}
+          {passwordMet ? t("passwordMet") : t("passwordHint")}
+        </p>
       </Field>
       <Button type="submit" size="lg" disabled={register.isPending}>
         {t("register.submit")}

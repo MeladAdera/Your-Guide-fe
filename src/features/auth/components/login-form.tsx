@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authApi } from "@/features/auth/api";
 import { loginSchema, type LoginValues } from "@/features/auth/schemas";
+import { PasswordInput } from "./password-input";
 import { useAuthForm } from "./use-auth-form";
 
 export function LoginForm() {
@@ -53,11 +54,9 @@ export function LoginForm() {
         />
       </Field>
       <Field id="password" label={t("password")} error={errors.password?.message}>
-        <Input
+        <PasswordInput
           id="password"
-          type="password"
           autoComplete="current-password"
-          dir="ltr"
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "password-error" : undefined}
           {...form.register("password")}

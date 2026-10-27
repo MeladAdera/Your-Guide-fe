@@ -53,7 +53,15 @@
       "hasAccount": "لديك حساب بالفعل؟",
       "toLogin": "تسجيل الدخول بدلاً من ذلك",
       "privacy": "التطبيق لا يشخّص ولا يقيّم ولا يصنّف. إجاباتك تبقى لك."
-    }
+    },
+    "showPassword": "إظهار",
+    "hidePassword": "إخفاء",
+    "showPasswordLabel": "إظهار كلمة المرور",
+    "hidePasswordLabel": "إخفاء كلمة المرور",
+    "capsLock": "مفتاح الأحرف الكبيرة (Caps Lock) مفعّل.",
+    "passwordMet": "8 أحرف على الأقل. تم.",
+    "emailSuggest": "هل المقصود {email}؟",
+    "useSuggestion": "استخدامه"
   },
   "errors": {
     "auth": {
