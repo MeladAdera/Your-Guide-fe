@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { Button } from "@/components/ui/button";
 import { authApi } from "@/features/auth/api";
+import { clearDeviceData } from "@/lib/device-data";
 
 export function LogoutButton(props: Omit<ComponentProps<typeof Button>, "onClick">) {
   const t = useTranslations("common");
@@ -15,9 +16,11 @@ export function LogoutButton(props: Omit<ComponentProps<typeof Button>, "onClick
   const logout = useMutation({
     mutationFn: authApi.logout,
     // 204 always, even with a stale cookie: whatever happened, the person is out.
+    // Nothing personal stays on the device: drafts and follow-ups go, then the cache.
     onSettled: () => {
+      clearDeviceData();
       queryClient.clear();
-      router.replace("/login");
+      router.replace("/signed-out");
       router.refresh();
     },
   });

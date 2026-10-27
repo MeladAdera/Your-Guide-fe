@@ -74,7 +74,14 @@
     "useSuggestion": "Use it",
     "cooldownTitle": "Let's take a short pause.",
     "cooldownBody": "Too many tries in a row. You can try again in a moment.",
-    "tryAgainIn": "Try again in {time}"
+    "tryAgainIn": "Try again in {time}",
+    "signedOut": {
+      "title": "You're signed out.",
+      "body": "Your goals and progress are saved in your account.",
+      "drafts": "Drafts of your answers were removed from this device",
+      "browser": "Nothing personal is left in this browser",
+      "again": "Log in again"
+    }
   },
   "errors": {
     "auth": {
