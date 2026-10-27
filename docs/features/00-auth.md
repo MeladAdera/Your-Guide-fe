@@ -24,7 +24,7 @@ All three share the **auth frame**: the form on one side, the path track on the 
 - Header: brand (path mark + "Your Guide"), language switch, theme switch.
 - The page content, centred, about 360px wide.
 - Footer: "© Your Guide" and the year.
-- The **path track**: a winding grey track drawn in SVG with a cobalt ball. The ball rolls one segment, pauses about three seconds, rolls the next, then fades and starts again. Decorative (`aria-hidden`).
+- The **path picture**: a static image of a winding grey track with a cobalt ball resting on it, one file for light and one for dark. Nothing moves. Decorative (`aria-hidden`, empty alt).
 
 **Register** (`auth.register.*`)
 1. Title "Start with you" and the intro.
@@ -51,9 +51,9 @@ All three share the **auth frame**: the form on one side, the path track on the 
 
 ## 4. Layout
 
-Laptop (1024px and up): two equal columns. Start side: header, centred form, footer. End side: the track panel, full height. In Arabic the panel moves to the left and the track mirrors, so the ball still rolls in reading direction.
+Laptop (1024px and up): two equal columns. Start side: header, centred form, footer. End side: the picture, full height, cropped to fill. In Arabic the panel moves to the left and the picture mirrors, so the track runs in reading direction.
 
-Phone: one column. Header, then a 160px band of the track, then the form, then the footer.
+Phone: one column. Header, then a 160px band of the same picture cropped around the ball, then the form, then the footer.
 
 ```
 laptop                                   phone
@@ -82,9 +82,9 @@ Register sends `timezone` (detected or chosen) and `locale` (the language showin
 
 ## 6. Decisions
 
-1. **The track is flat SVG, the motion plain CSS.** Depth comes from six stacked strokes; the ball moves with `offset-path`. A few kilobytes, themeable through tokens, no 3D library and no image files. Browsers without `offset-path` show the ball standing still. Alternative not taken: a rendered 3D image (heavy, a second file for dark mode).
-2. **Track colours are tokens** (`--track-*`): greys from the neutrals and a cobalt ball, redefined for dark. The track stays grey; only the ball carries the accent, so the one-hue rule holds.
-3. **Motion is slow and stops.** One step every four seconds; `prefers-reduced-motion` keeps the ball still.
+1. **The picture is a plain static image, no animation and no 3D** (owner's choice, 2026-10-27). Two SVG files in `public/images/auth/`, light and dark, swapped by the theme class. A designer can replace them with a finished illustration without touching code. Alternatives not taken: an animated ball on a CSS motion path (tried, dropped for simplicity), a rendered 3D image.
+2. **Colours come from the palette.** The track uses the neutral greys, only the ball is cobalt, so the one-hue rule holds; the dark file uses the dark tokens' values.
+3. **The picture loads with priority only on phones**, where it sits above the form; on a laptop it is beside the form and never blocks it.
 4. **No "Remember me", no "Forgot password".** Sessions already last 30 days; the backend has no reset flow yet, so a link would lead nowhere.
 5. **Timezone is visible and changeable at register only.** The API cannot change it later.
 6. **Email typo hint is local.** A small list of common domains and an edit distance of at most 2; nothing is sent anywhere.

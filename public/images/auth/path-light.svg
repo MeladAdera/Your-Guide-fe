@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 844" width="640" height="844">
+  <defs>
+    <radialGradient id="ball" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#7fa6ee"/>
+      <stop offset="55%" stop-color="#285cc2"/>
+      <stop offset="100%" stop-color="#173f8f"/>
+    </radialGradient>
+  </defs>
+  <rect width="640" height="844" fill="#edeff0"/>
+  <g fill="none">
+    <path d="M -80 760 C 120 760, 150 560, 320 560 S 500 330, 720 330" stroke="#e1e4e7" stroke-width="96" transform="translate(0 22)"/>
+    <path d="M -80 760 C 120 760, 150 560, 320 560 S 500 330, 720 330" stroke="#c4c8cd" stroke-width="90" transform="translate(0 13)"/>
+    <path d="M -80 760 C 120 760, 150 560, 320 560 S 500 330, 720 330" stroke="#f7f8fa" stroke-width="90"/>
+    <path d="M -80 760 C 120 760, 150 560, 320 560 S 500 330, 720 330" stroke="#cfd3d7" stroke-width="58"/>
+    <path d="M -80 760 C 120 760, 150 560, 320 560 S 500 330, 720 330" stroke="#e6e8eb" stroke-width="52" transform="translate(0 4)"/>
+    <path d="M -80 760 C 120 760, 150 560, 320 560 S 500 330, 720 330" stroke="#b4b8bd" stroke-width="90" stroke-dasharray="1.5 118"/>
+  </g>
+  <ellipse cx="324" cy="584" rx="26" ry="8" fill="#9ea3a9" opacity="0.45"/>
+  <circle cx="320" cy="556" r="24" fill="url(#ball)"/>
+</svg>
