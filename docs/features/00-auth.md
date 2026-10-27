@@ -1,6 +1,6 @@
 # 00 · Register, log in, log out
 
-Status: spec 2026-10-27 · building 2026-10-27 · verified · done
+Status: spec 2026-10-27 · building 2026-10-27 · verified 2026-10-27 (local API, both languages, phone and laptop) · done 2026-10-27
 
 Design: option 4 on the sign-in canvas (the owner's reference, redrawn in ink and cobalt): https://claude.ai/artifact/EiiHptVzGuE948hWdJwEp4
 
@@ -90,15 +90,21 @@ Register sends `timezone` (detected or chosen) and `locale` (the language showin
 6. **Email typo hint is local.** A small list of common domains and an edit distance of at most 2; nothing is sent anywhere.
 7. **Rate limit counts down 60 seconds** from the 429 (the API allows 5 attempts a minute and sends no wait time).
 8. **The expired-session notice only appears when the 401 listener sent the person** (`?reason=expired`), not for a first visit.
-9. **Logging out clears every `yg:` key** from local and session storage (drafts, struggle follow-ups), then the query cache. No confirmation: logging back in undoes it.
+9. **Logging out clears every `yg:` key** from local and session storage (drafts, struggle follow-ups), then the query cache. No confirmation: logging back in undoes it. The signed-out page clears again when it opens, so its promise holds however the person arrived.
+10. **Passwords stay left to right in Arabic**, with Show/Hide at the field's right edge, because passwords are typed in Latin characters; the label and the rule line follow the page direction.
+11. **The typo hint uses an edit distance where swapping two letters counts once** ("gmial"), one edit for normal domains and two for long ones, so real domains such as "acme.com" are never "corrected".
+12. **The theme switch moved to the footer of the sign-in frame** so the phone header (brand and language) stays on one line.
 
 ## 7. Tests
 
-- Unit: email suggestion, password rule, timezone label, clearing device data, the countdown formatting.
-- Playwright: the login page in both languages (existing), log out lands on `/signed-out`, the register page shows the road ahead and the timezone line.
-- By hand against the API: register, log in, wrong password, six quick attempts, log out; English and Arabic; phone and laptop; light and dark.
+- Unit (Vitest): email suggestion and edit distance, timezone city, offset and list, the countdown hook and formatting, clearing device data.
+- Playwright, laptop and phone: login in both languages; register → onboarding → log out → `/signed-out` with a draft removed (against the local API); register shows the road, language and timezone; the typo fix; the expired notice and the countdown (429 faked in the browser); the signed-out page opens without an account and clears data.
+- Checked in the browser against the local API on 2026-10-27: register, wrong password ("That email and password don't match."), right password → onboarding, log out. Screens checked in English and Arabic, light and dark, at 390px and 1280px.
+- Not checked against the real rate limit: the countdown was tested with a faked 429.
 
 ## 8. Open questions and follow-ups
 
 - Backend: a password reset flow, then add "Forgot password" to the login page.
 - Backend: send `Retry-After` with 429 so the countdown can be exact.
+- Someone still signed in who opens `/signed-out` by typing the address sees "You're signed out" while the session is still valid. Options: log out on that page too, or redirect signed-in visitors to `/`. Small; decide with the settings page.
+- The picture files can be replaced by a designer's illustration at the same paths (`public/images/auth/path-light.svg`, `path-dark.svg`).

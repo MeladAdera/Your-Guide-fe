@@ -14,7 +14,7 @@ Done (foundation, 9 commits on `main`):
 - App shell (top nav on laptop, bottom bar on phone), settings (language, theme, logout).
 - Placeholder pages for everything that comes next, so navigation never 404s.
 
-Not done yet: nothing has run against the real API. The first thing each feature does is prove its calls against the running backend.
+Sign-in pages done (feature 0, `docs/features/00-auth.md`), checked against the local API on 2026-10-27. The landing page is paused until the owner has a direction.
 
 ## The loop for every feature
 

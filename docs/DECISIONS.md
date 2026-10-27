@@ -36,6 +36,15 @@ Tokens are in `src/app/globals.css`. If the cobalt feels loud in use, pull its s
 - In the browser, any 401 from any route dispatches a window event; a listener sends the person to `/login?next=<path>`.
 - `/` is the start-up router from handoff §7: me → onboarding → goals → active session → home.
 
+## 2026-10-27 · Sign-in pages and device data
+
+Details and reasons in [features/00-auth.md](./features/00-auth.md). App-wide parts:
+
+- **The working method is page by page**: ideas first, the owner picks; then design options, the owner picks; then the build. The next page starts from what the previous one settled.
+- **Sign-in frame**: form on the start side, a static picture (a winding track, cobalt ball) on the end side, a band of it on phones. Static images on purpose: the owner chose no animation and no 3D. Mirrored in Arabic.
+- **Everything the app stores in the browser uses the `yg:` prefix** (`src/lib/device-data.ts`), so logging out can remove all of it. Any feature that writes to local or session storage must use that prefix.
+- **A rate limit is a pause, not an error**: a calm note and a 60-second countdown on the button.
+
 ## 2026-10-27 · State: no global store
 
 Almost everything the app shows belongs to the backend (goals, tasks, steps, sessions, progress). A global client store (Redux, Zustand) would keep a second copy of it that goes stale whenever the server changes. Each kind of state has its own home instead:
