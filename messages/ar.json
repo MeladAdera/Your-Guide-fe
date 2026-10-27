@@ -44,7 +44,8 @@
       "intro": "سجّل الدخول للمتابعة من حيث توقفت.",
       "submit": "تسجيل الدخول",
       "noAccount": "أول مرة هنا؟",
-      "toRegister": "إنشاء حساب"
+      "toRegister": "إنشاء حساب",
+      "expired": "انتهت الجلسة. يمكن تسجيل الدخول للمتابعة من حيث توقفت."
     },
     "register": {
       "title": "نبدأ بك",
@@ -70,7 +71,10 @@
     "capsLock": "مفتاح الأحرف الكبيرة (Caps Lock) مفعّل.",
     "passwordMet": "8 أحرف على الأقل. تم.",
     "emailSuggest": "هل المقصود {email}؟",
-    "useSuggestion": "استخدامه"
+    "useSuggestion": "استخدامه",
+    "cooldownTitle": "لنأخذ استراحة قصيرة.",
+    "cooldownBody": "محاولات كثيرة متتالية. يمكن المحاولة مجدداً بعد قليل.",
+    "tryAgainIn": "المحاولة مجدداً بعد {time}"
   },
   "errors": {
     "auth": {

@@ -7,6 +7,10 @@ import type { FieldValues, Path, UseFormSetError } from "react-hook-form";
 import { setLocaleCookie } from "@/i18n/locale-cookie";
 import { isApiError } from "@/lib/api/errors";
 import type { Locale, User } from "@/lib/api/types";
+import { useCooldown } from "@/features/auth/cooldown";
+
+/** The API allows 5 attempts a minute and sends no wait time (docs/handoff.md §4). */
+const RATE_LIMIT_SECONDS = 60;
 
 /** Only same-origin paths are safe return targets. */
 export function safeNext(value: string | null): string {
@@ -23,6 +27,8 @@ export function useAuthForm<T extends FieldValues>(setError: UseFormSetError<T>)
   const search = useSearchParams();
   const locale = useLocale() as Locale;
   const [formError, setFormError] = useState<unknown>(null);
+  const cooldown = useCooldown();
+  const { start: startCooldown } = cooldown;
 
   const onSuccess = useCallback(
     (user: User) => {
@@ -37,6 +43,12 @@ export function useAuthForm<T extends FieldValues>(setError: UseFormSetError<T>)
   const onError = useCallback(
     (e: unknown, fieldCodes: Partial<Record<string, Path<T>>> = {}) => {
       if (isApiError(e)) {
+        if (e.code === "rate_limited") {
+          // A calm pause with a countdown instead of an error (docs/features/00-auth.md).
+          setFormError(null);
+          startCooldown(RATE_LIMIT_SECONDS);
+          return;
+        }
         if (e.code === "validation.failed") {
           const errors = e.fieldErrors();
           let placed = false;
@@ -57,8 +69,8 @@ export function useAuthForm<T extends FieldValues>(setError: UseFormSetError<T>)
       }
       setFormError(e);
     },
-    [setError],
+    [setError, startCooldown],
   );
 
-  return { locale, formError, setFormError, onSuccess, onError };
+  return { locale, formError, setFormError, onSuccess, onError, cooldownSeconds: cooldown.secondsLeft };
 }

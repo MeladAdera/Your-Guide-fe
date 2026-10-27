@@ -44,7 +44,8 @@
       "intro": "Log in to pick up where you left off.",
       "submit": "Log in",
       "noAccount": "New here?",
-      "toRegister": "Create an account"
+      "toRegister": "Create an account",
+      "expired": "You were signed out. Log in to continue where you were."
     },
     "register": {
       "title": "Start with you",
@@ -70,7 +71,10 @@
     "capsLock": "Caps Lock is on.",
     "passwordMet": "At least 8 characters. Done.",
     "emailSuggest": "Did you mean {email}?",
-    "useSuggestion": "Use it"
+    "useSuggestion": "Use it",
+    "cooldownTitle": "Let's take a short pause.",
+    "cooldownBody": "Too many tries in a row. You can try again in a moment.",
+    "tryAgainIn": "Try again in {time}"
   },
   "errors": {
     "auth": {

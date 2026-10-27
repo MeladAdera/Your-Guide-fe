@@ -15,7 +15,8 @@ export function UnauthorizedListener() {
     const onUnauthorized = () => {
       if (pathname.startsWith("/login") || pathname.startsWith("/register")) return;
       const next = encodeURIComponent(pathname);
-      router.replace(`/login?next=${next}`);
+      // `reason=expired` lets the login page say why the person is there.
+      router.replace(`/login?next=${next}&reason=expired`);
     };
     window.addEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
     return () => window.removeEventListener(UNAUTHORIZED_EVENT, onUnauthorized);

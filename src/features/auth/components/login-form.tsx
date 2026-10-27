@@ -8,18 +8,18 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { Field } from "@/components/shared/field";
 import { FormError } from "@/components/shared/form-error";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authApi } from "@/features/auth/api";
 import { loginSchema, type LoginValues } from "@/features/auth/schemas";
 import { PasswordInput } from "./password-input";
+import { SubmitButton } from "./submit-button";
 import { useAuthForm } from "./use-auth-form";
 
 export function LoginForm() {
   const t = useTranslations("auth");
   const search = useSearchParams();
   const form = useForm<LoginValues>({ resolver: zodResolver(loginSchema), defaultValues: { email: "", password: "" } });
-  const { formError, setFormError, onSuccess, onError } = useAuthForm(form.setError);
+  const { formError, setFormError, onSuccess, onError, cooldownSeconds } = useAuthForm(form.setError);
 
   const login = useMutation({
     mutationFn: authApi.login,
@@ -62,9 +62,7 @@ export function LoginForm() {
           {...form.register("password")}
         />
       </Field>
-      <Button type="submit" size="lg" disabled={login.isPending}>
-        {t("login.submit")}
-      </Button>
+      <SubmitButton label={t("login.submit")} pending={login.isPending} cooldownSeconds={cooldownSeconds} />
       <p className="text-center text-sm text-muted-foreground">
         {t("login.noAccount")}{" "}
         <Link href={registerHref} className="font-medium text-primary underline-offset-4 hover:underline">

@@ -10,7 +10,6 @@ import { useState, useSyncExternalStore } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Field } from "@/components/shared/field";
 import { FormError } from "@/components/shared/form-error";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authApi, browserTimezone } from "@/features/auth/api";
 import { registerSchema, type RegisterValues } from "@/features/auth/schemas";
@@ -18,6 +17,7 @@ import { suggestEmail } from "@/features/auth/email-suggest";
 import { cn } from "@/lib/utils";
 import { LocaleSwitch } from "@/features/settings/components/locale-switch";
 import { PasswordInput } from "./password-input";
+import { SubmitButton } from "./submit-button";
 import { TimezoneField } from "./timezone-field";
 import { useAuthForm } from "./use-auth-form";
 
@@ -28,7 +28,7 @@ export function RegisterForm() {
   const te = useTranslations("errors");
   const search = useSearchParams();
   const form = useForm<RegisterValues>({ resolver: zodResolver(registerSchema), defaultValues: { email: "", password: "" } });
-  const { locale, formError, setFormError, onSuccess, onError } = useAuthForm(form.setError);
+  const { locale, formError, setFormError, onSuccess, onError, cooldownSeconds } = useAuthForm(form.setError);
 
   const register = useMutation({
     mutationFn: authApi.register,
@@ -111,9 +111,7 @@ export function RegisterForm() {
         <LocaleSwitch block labelledBy="speaks-label" />
       </div>
       {timezone ? <TimezoneField value={timezone} onChange={setChosenTimezone} /> : null}
-      <Button type="submit" size="lg" disabled={register.isPending}>
-        {t("register.submit")}
-      </Button>
+      <SubmitButton label={t("register.submit")} pending={register.isPending} cooldownSeconds={cooldownSeconds} />
       <p className="text-sm text-muted-foreground">{t("register.privacy")}</p>
       <p className="text-center text-sm text-muted-foreground">
         {t("register.hasAccount")}{" "}
