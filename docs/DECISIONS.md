@@ -35,3 +35,37 @@ Tokens are in `src/app/globals.css`. If the cobalt feels loud in use, pull its s
 - The `(app)` layout asks `GET /api/auth/me` server-side and redirects to `/login` on 401. Server calls go to `API_URL` directly and forward the incoming cookie (`src/lib/api/server.ts`).
 - In the browser, any 401 from any route dispatches a window event; a listener sends the person to `/login?next=<path>`.
 - `/` is the start-up router from handoff §7: me → onboarding → goals → active session → home.
+
+## 2026-10-27 · State: no global store
+
+Almost everything the app shows belongs to the backend (goals, tasks, steps, sessions, progress). A global client store (Redux, Zustand) would keep a second copy of it that goes stale whenever the server changes. Each kind of state has its own home instead:
+
+| State | Lives in | Why |
+| --- | --- | --- |
+| Server data | TanStack Query | Caching, no duplicate requests, refresh after changes by key, optimistic updates with rollback (step tick, reorder). |
+| Form input | react-hook-form + zod | Inputs are not re-rendered on every keystroke, which matters for the long text areas. One zod schema mirrors the API limits and gives the TypeScript types; server field errors map onto the right input. |
+| Theme | next-themes | Applies the theme before first paint (no flash), follows the OS setting, supports a manual choice. |
+| Language | `NEXT_LOCALE` cookie | The server needs it to render the right language and direction on the first request. |
+| Current page or step | The URL | Refresh, Back and shared links land on the right screen with no restore code. |
+| Timer | Derived from the server's `startedAt` | Nothing to store; survives a sleeping tab. |
+| Drafts, sound and length preferences | `localStorage` | Device-only and not worth a server round trip. Drafts cannot go to the API because each `PUT` replaces the whole screen. |
+
+Pages fetch on the server first, and a client store does not exist there, so every page would also have to copy data into it on load. Add a small Zustand store only if browser-only state must be shared across pages (for example ambient sound that keeps playing while moving between pages).
+
+## 2026-10-27 · Folder structure: by feature
+
+```
+src/
+  app/           routes only: page, layout, loading, error files
+  features/<f>/  components/, api.ts, schemas.ts, helpers, tests beside the code
+  components/ui/ shadcn primitives, never edited by features
+  components/shared/  app shell, form field, providers, used by several features
+  lib/api/       client, server helper, error codes, response types
+  i18n/          locale config and cookie
+```
+
+- **One feature, one folder.** Each feature adds components, schemas, API calls and tests; grouped by type they would spread over four or five folders. Grouped by feature, building or fixing one feature means opening one folder, matching the one-spec-one-slice way of working.
+- **Thin routes.** A page loads data and renders a component from its feature. Next.js changes its rules for route files between versions, so less code there means less to break.
+- **Imports go one way.** Features import from `components/` and `lib/`; shared code never imports from a feature. One feature uses another only through what it exports (the session screen opening the struggling sheet).
+- **shadcn stays clean.** Generated files stay alone in `components/ui/`, so updating them is a simple replace.
+- **Not taken:** private folders such as `_components` beside each route, because several pieces appear on more than one route (the goal form, the struggling sheet) and would have no clear home.

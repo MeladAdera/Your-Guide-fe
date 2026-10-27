@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { Button } from "@/components/ui/button";
-import { authApi } from "@/lib/api/auth";
+import { authApi } from "@/features/auth/api";
 
 export function LogoutButton(props: Omit<ComponentProps<typeof Button>, "onClick">) {
   const t = useTranslations("common");

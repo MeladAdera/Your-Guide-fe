@@ -6,12 +6,12 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import { Field } from "@/components/forms/field";
-import { FormError } from "@/components/forms/form-error";
+import { Field } from "@/components/shared/field";
+import { FormError } from "@/components/shared/form-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authApi, browserTimezone } from "@/lib/api/auth";
-import { registerSchema, type RegisterValues } from "@/lib/schemas/auth";
+import { authApi, browserTimezone } from "@/features/auth/api";
+import { registerSchema, type RegisterValues } from "@/features/auth/schemas";
 import { useAuthForm } from "./use-auth-form";
 
 export function RegisterForm() {

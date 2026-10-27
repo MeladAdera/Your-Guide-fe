@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { LogoutButton } from "@/components/auth/logout-button";
-import { LocaleSwitch } from "@/components/settings/locale-switch";
-import { ThemeToggle } from "@/components/settings/theme-toggle";
+import { LogoutButton } from "@/features/auth/components/logout-button";
+import { LocaleSwitch } from "@/features/settings/components/locale-switch";
+import { ThemeToggle } from "@/features/settings/components/theme-toggle";
 import { Separator } from "@/components/ui/separator";
 
 export async function generateMetadata(): Promise<Metadata> {

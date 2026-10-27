@@ -1,5 +1,5 @@
-import { api } from "./client";
-import type { Locale, User } from "./types";
+import { api } from "@/lib/api/client";
+import type { Locale, User } from "@/lib/api/types";
 
 export interface RegisterInput {
   email: string;

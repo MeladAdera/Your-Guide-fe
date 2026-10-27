@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useUser } from "@/components/user-provider";
+import { useUser } from "@/components/shared/user-provider";
 
 export function SignedInAs() {
   const t = useTranslations("home");

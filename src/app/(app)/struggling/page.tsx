@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { ComingNext } from "@/components/coming-next";
+import { ComingNext } from "@/components/shared/coming-next";
 
 export default async function StrugglingPage() {
   const t = await getTranslations("nav");

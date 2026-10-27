@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { ComingNext } from "@/components/coming-next";
+import { ComingNext } from "@/components/shared/coming-next";
 import { ONBOARDING_SCREEN_PATHS, type OnboardingScreen } from "@/lib/api/types";
 
 const SCREEN_BY_PATH = Object.fromEntries(

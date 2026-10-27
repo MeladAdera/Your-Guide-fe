@@ -3,11 +3,11 @@ import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from "next/font/go
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
-import { UnauthorizedListener } from "@/components/auth/unauthorized-listener";
+import { UnauthorizedListener } from "@/features/auth/components/unauthorized-listener";
 import { DirectionProvider } from "@/components/ui/direction";
 import { Toaster } from "@/components/ui/sonner";
 import { directionOf, type Locale } from "@/i18n/config";
-import { QueryProvider } from "@/lib/query-provider";
+import { QueryProvider } from "@/components/shared/query-provider";
 import "./globals.css";
 
 // IBM Plex: one design across Latin and Arabic, so mixed text reads evenly.

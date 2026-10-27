@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { AppShell } from "@/components/app-shell";
-import { UserProvider } from "@/components/user-provider";
+import { AppShell } from "@/components/shared/app-shell";
+import { UserProvider } from "@/components/shared/user-provider";
 import { serverApiOrNull } from "@/lib/api/server";
 import type { User } from "@/lib/api/types";
 

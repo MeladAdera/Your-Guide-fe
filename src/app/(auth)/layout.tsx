@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { LocaleSwitch } from "@/components/settings/locale-switch";
-import { ThemeToggle } from "@/components/settings/theme-toggle";
+import { LocaleSwitch } from "@/features/settings/components/locale-switch";
+import { ThemeToggle } from "@/features/settings/components/theme-toggle";
 
 export default async function AuthLayout({ children }: LayoutProps<"/">) {
   const t = await getTranslations("app");
