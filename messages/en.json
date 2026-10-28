@@ -66,8 +66,6 @@
       "heroTitle": "Every journey starts with one step.",
       "heroBody": "We'll guide you from the first one."
     },
-    "showPassword": "Show",
-    "hidePassword": "Hide",
     "showPasswordLabel": "Show password",
     "hidePasswordLabel": "Hide password",
     "capsLock": "Caps Lock is on.",
@@ -83,7 +81,9 @@
       "drafts": "Drafts of your answers were removed from this device",
       "browser": "Nothing personal is left in this browser",
       "again": "Log in again"
-    }
+    },
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password"
   },
   "errors": {
     "auth": {

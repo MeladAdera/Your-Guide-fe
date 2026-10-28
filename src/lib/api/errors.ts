@@ -41,6 +41,10 @@ export type ErrorCode = ApiErrorCode | ClientErrorCode;
 
 /** Validation rule codes in use, each with a sentence in the message files. */
 export const VALIDATION_RULES = [
+  // Client-side rules from the zod schemas.
+  "required",
+  "passwordLength",
+  // Rules the API reports.
   "isEmail",
   "isString",
   "minLength",

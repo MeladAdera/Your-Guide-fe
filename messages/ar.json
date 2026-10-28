@@ -66,8 +66,6 @@
       "heroTitle": "كل رحلة تبدأ بخطوة واحدة.",
       "heroBody": "سنرشدك من الخطوة الأولى."
     },
-    "showPassword": "إظهار",
-    "hidePassword": "إخفاء",
     "showPasswordLabel": "إظهار كلمة المرور",
     "hidePasswordLabel": "إخفاء كلمة المرور",
     "capsLock": "مفتاح الأحرف الكبيرة (Caps Lock) مفعّل.",
@@ -83,7 +81,9 @@
       "drafts": "حُذفت مسودات الإجابات من هذا الجهاز",
       "browser": "لم يبقَ شيء شخصي في هذا المتصفح",
       "again": "تسجيل الدخول مجدداً"
-    }
+    },
+    "emailPlaceholder": "بريدك الإلكتروني",
+    "passwordPlaceholder": "كلمة المرور الخاصة بك"
   },
   "errors": {
     "auth": {
@@ -156,7 +156,7 @@
     "matches": "الصيغة غير صحيحة.",
     "whitelistValidation": "يُرجى مراجعة هذا الحقل.",
     "required": "هذا الحقل مطلوب.",
-    "passwordLength": "يُرجى استخدام 8 أحرف على الأقل.",
+    "passwordLength": "8 أحرف على الأقل.",
     "tooLong": "يُرجى ألّا يتجاوز النص {max} حرفاً."
   },
   "onboarding": {

@@ -43,7 +43,7 @@ export function SignInForm() {
     <form
       noValidate
       aria-labelledby="signin-heading"
-      className="grid gap-5"
+      className="grid gap-5 lg:gap-4"
       onSubmit={form.handleSubmit((values) => {
         setFormError(null);
         login.mutate({ email: values.email, password: values.password });
@@ -62,6 +62,7 @@ export function SignInForm() {
           <Input
             id="signin-email"
             type="email"
+            placeholder={t("emailPlaceholder")}
             required
             autoComplete="email"
             inputMode="email"
@@ -77,6 +78,7 @@ export function SignInForm() {
         <PasswordInput
           id="signin-password"
           required
+          placeholder={t("passwordPlaceholder")}
           autoComplete="current-password"
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "signin-password-error" : undefined}

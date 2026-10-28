@@ -14,8 +14,14 @@ async function apiIsUp(): Promise<boolean> {
 /** Laptop layout starts at 1024px (Tailwind lg). */
 const isLaptop = (page: Page) => (page.viewportSize()?.width ?? 0) >= 1024;
 
-/** The laptop image panel that slides over the inactive form. */
-const panel = (page: Page) => page.locator("div[aria-hidden].z-20");
+/** The laptop photo tile that glides over the inactive form inside the card. */
+const tile = (page: Page) => page.locator("div.z-20");
+
+/** The tile's horizontal centre as a share of the viewport width (0..1). */
+const tileCentre = async (page: Page) => {
+  const box = (await tile(page).boundingBox())!;
+  return (box.x + box.width / 2) / page.viewportSize()!.width;
+};
 
 /** On phones the form heading only appears once a field has been focused. */
 async function startFilling(page: Page, firstField: string) {
@@ -70,36 +76,38 @@ test.describe("foundation", () => {
 });
 
 test.describe("auth shell", () => {
-  test("laptop: Sign up slides the panel over the sign-in form, Back reverses it", async ({ page }) => {
+  test("laptop: the photo tile glides over the sign-in form for sign-up, Back reverses it", async ({ page }) => {
     test.skip(!isLaptop(page), "laptop layout");
     await page.goto("/sign-in");
-    const width = page.viewportSize()!.width;
-    await expect.poll(async () => Math.round((await panel(page).boundingBox())!.x)).toBe(width / 2);
+    await expect.poll(() => tileCentre(page)).toBeGreaterThan(0.5);
+    await expect(tile(page)).toContainText("Every journey starts with one step.");
 
     await page.locator("section:not([inert])").getByRole("link", { name: "Sign up" }).click();
     await expect(page).toHaveURL(/\/sign-up$/, { timeout: 15_000 });
-    await expect.poll(async () => Math.round((await panel(page).boundingBox())!.x)).toBe(0);
+    await expect.poll(() => tileCentre(page)).toBeLessThan(0.5);
+    await expect(page.locator("#signup-email")).toBeInViewport();
 
     await page.goBack();
     await expect(page).toHaveURL(/\/sign-in$/, { timeout: 15_000 });
-    await expect.poll(async () => Math.round((await panel(page).boundingBox())!.x)).toBe(width / 2);
+    await expect.poll(() => tileCentre(page)).toBeGreaterThan(0.5);
   });
 
   test("laptop: loading /sign-up directly shows the final state at once", async ({ page }) => {
     test.skip(!isLaptop(page), "laptop layout");
     await page.goto("/sign-up");
-    expect(Math.round((await panel(page).boundingBox())!.x)).toBe(0);
+    // Read immediately, without waiting: a glide in progress would still be past the middle.
+    expect(await tileCentre(page)).toBeLessThan(0.5);
   });
 
-  test("laptop, Arabic: the panel and the slide are mirrored", async ({ page }) => {
+  test("laptop, Arabic: the card and the glide are mirrored", async ({ page }) => {
     test.skip(!isLaptop(page), "laptop layout");
-    await page.context().addCookies([{ name: "NEXT_LOCALE", value: "ar", url: page.url() === "about:blank" ? "http://localhost:3000" : page.url() }]);
+    await page.context().addCookies([{ name: "NEXT_LOCALE", value: "ar", url: "http://localhost:3000" }]);
     await page.goto("/sign-in");
-    const width = page.viewportSize()!.width;
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-    expect(Math.round((await panel(page).boundingBox())!.x)).toBe(0);
+    expect(await tileCentre(page)).toBeLessThan(0.5);
     await page.locator("section:not([inert])").getByRole("link", { name: "إنشاء حساب" }).click();
-    await expect.poll(async () => Math.round((await panel(page).boundingBox())!.x)).toBe(width / 2);
+    await expect(page).toHaveURL(/\/sign-up$/, { timeout: 15_000 });
+    await expect.poll(() => tileCentre(page)).toBeGreaterThan(0.5);
     await expect(page.locator("#signup-email")).toBeInViewport();
   });
 
@@ -108,7 +116,7 @@ test.describe("auth shell", () => {
     const page = await context.newPage();
     await page.goto("/sign-in");
     // motion-reduce removes the transition; the global reduced-motion rule leaves at most 0.01ms.
-    const style = await panel(page).evaluate((el) => ({ property: getComputedStyle(el).transitionProperty, duration: parseFloat(getComputedStyle(el).transitionDuration) }));
+    const style = await tile(page).evaluate((el) => ({ property: getComputedStyle(el).transitionProperty, duration: parseFloat(getComputedStyle(el).transitionDuration) }));
     expect(style.property === "none" || style.duration <= 0.00001).toBe(true);
     await context.close();
   });
@@ -125,7 +133,8 @@ test.describe("auth shell", () => {
   test("phone: the first focus collapses the hero and shows the form heading; sign up slides in", async ({ page }) => {
     test.skip(isLaptop(page), "phone layout");
     await page.goto("/sign-in");
-    await expect(page.getByText("Same journey. New day.")).toBeVisible();
+    // The same words are also in the laptop tile, which is hidden on phones.
+    await expect(page.getByText("Same journey. New day.").filter({ visible: true })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Welcome back" })).toBeHidden();
 
     await page.locator("#signin-email").focus();

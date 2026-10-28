@@ -21,7 +21,15 @@ import { SubmitButton } from "./submit-button";
 import { TimezoneField } from "./timezone-field";
 import { useAuthForm } from "./use-auth-form";
 
-const noSubscribe = () => () => {};
+/**
+ * The browser's timezone never changes while the page is open, but React has to
+ * be told once after hydration to read it: a form hydrated while hidden behind
+ * the photo tile otherwise kept the server's empty value.
+ */
+const notifyOnce = (onChange: () => void) => {
+  const id = setTimeout(onChange, 0);
+  return () => clearTimeout(id);
+};
 
 /**
  * Create an account (docs/features/00-auth.md). Sits in the auth shell next
@@ -50,7 +58,7 @@ export function SignUpForm() {
   const suggestion = touchedFields.email ? suggestEmail(email) : null;
   const passwordMet = password.length >= 8;
   // The browser's zone is only known on the client; null while rendering on the server.
-  const detectedTimezone = useSyncExternalStore(noSubscribe, browserTimezone, () => null);
+  const detectedTimezone = useSyncExternalStore(notifyOnce, browserTimezone, () => null);
   const [chosenTimezone, setChosenTimezone] = useState<string | null>(null);
   const timezone = chosenTimezone ?? detectedTimezone;
 
@@ -58,7 +66,7 @@ export function SignUpForm() {
     <form
       noValidate
       aria-labelledby="signup-heading"
-      className="grid gap-5"
+      className="grid gap-5 lg:gap-4"
       onSubmit={form.handleSubmit((values) => {
         setFormError(null);
         register.mutate({ email: values.email, password: values.password, timezone: timezone ?? browserTimezone(), locale });
@@ -71,6 +79,7 @@ export function SignUpForm() {
           <Input
             id="signup-email"
             type="email"
+            placeholder={t("emailPlaceholder")}
             required
             autoComplete="email"
             inputMode="email"
@@ -106,6 +115,7 @@ export function SignUpForm() {
         <PasswordInput
           id="signup-password"
           required
+          placeholder={t("passwordPlaceholder")}
           autoComplete="new-password"
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "signup-password-error signup-password-rule" : "signup-password-rule"}

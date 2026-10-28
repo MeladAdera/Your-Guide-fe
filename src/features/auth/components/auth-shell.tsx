@@ -31,9 +31,14 @@ const IMAGE_TONE = "dark:brightness-[0.45] dark:saturate-[0.7]";
  * pages themselves render nothing; moving a form into its page would make it
  * vanish halfway through the slide.
  *
- * Laptop: two halves, the image panel slides over the inactive form with a
- * parallax image inside. Phone: a 200% wide row of the two forms slides by
- * half; a hero image collapses to the logo row on the first focus.
+ * Laptop: a large rounded card on the sage ground holds both forms side by
+ * side; an inset photo tile with a message for the other form glides over the
+ * inactive one (the image inside moves a little the other way). On short
+ * windows the card scales down so it always fits. Phone: a hero with the photo
+ * and a headline, the form in a sheet over it; a 200% wide row of the two
+ * forms slides by half, and the first focus on a field collapses the hero.
+ *
+ * This screen is the design reference for the whole app (docs/DESIGN.md).
  */
 export function AuthShell({ children }: { children: ReactNode }) {
   const mode = modeOf(usePathname());
@@ -54,9 +59,24 @@ export function AuthShell({ children }: { children: ReactNode }) {
     { mode: "sign-up", headingId: "signup-heading", title: t("auth.register.title"), intro: t("auth.register.intro"), form: <SignUpForm /> },
   ] as const;
 
+  // The photo tile speaks to the other form: on sign-in it shows the sign-up message, and back.
+  const invites = [
+    { mode: "sign-in", title: t("auth.register.heroTitle"), body: t("auth.register.heroBody") },
+    { mode: "sign-up", title: t("auth.login.heroTitle"), body: t("auth.login.heroBody") },
+  ] as const;
+
   return (
-    <div className="relative flex min-h-dvh flex-col bg-background lg:block">
+    <div className="relative flex min-h-dvh flex-col bg-background lg:items-center lg:justify-center lg:bg-muted lg:px-8 lg:pt-17 lg:pb-4">
       {children}
+
+      {/* Laptop: brand and language above the card, the year below it. */}
+      <header className="absolute inset-x-0 top-0 hidden items-center justify-between px-10 py-5 lg:flex">
+        <BrandMark name={name} />
+        <LocaleSwitch compact />
+      </header>
+      <footer className="absolute inset-x-0 bottom-0 hidden px-10 py-4 text-sm text-muted-foreground lg:block">
+        © {year} {name}
+      </footer>
 
       {/* Phone hero: image, logo row, headline. Collapses to the logo row while filling. */}
       <div className="relative lg:hidden">
@@ -100,8 +120,8 @@ export function AuthShell({ children }: { children: ReactNode }) {
         />
       </div>
 
-      {/* The forms. Phone: a sheet over the hero, a 200% row that slides by half. Laptop: two halves. */}
-      <div className="relative z-10 -mt-6 flex-1 rounded-t-3xl bg-background lg:mt-0 lg:rounded-none">
+      {/* The card. Phone: a sheet over the hero, a 200% row that slides by half. Laptop: a framed card, both forms side by side, a photo tile inset over one of them. */}
+      <div className="relative z-10 -mt-6 flex-1 rounded-t-3xl bg-background lg:mt-0 lg:w-full lg:max-w-[1320px] [@media(min-width:1024px)_and_(min-height:701px)_and_(max-height:820px)]:[zoom:0.92] [@media(min-width:1024px)_and_(max-height:700px)]:[zoom:0.82] lg:flex-none lg:rounded-[28px] lg:shadow-[0_30px_80px_-30px_rgb(15_61_53/0.35)]">
         <div className="overflow-hidden lg:overflow-visible">
           <div
             onFocus={(e) => {
@@ -117,32 +137,66 @@ export function AuthShell({ children }: { children: ReactNode }) {
             )}
           >
             {sections.map((section) => (
-              <section key={section.mode} inert={section.mode !== mode} className="flex min-w-0 flex-col lg:min-h-dvh">
-                <header className="hidden items-center justify-between px-8 py-6 lg:flex">
-                  <BrandMark name={name} />
-                  <LocaleSwitch compact />
-                </header>
-                <div className="flex flex-1 justify-center px-5 pt-7 pb-8 lg:items-center lg:px-8 lg:py-10">
-                  <div className="w-full max-w-[360px]">
+              <section key={section.mode} inert={section.mode !== mode} className="flex min-w-0 flex-col">
+                <div className="flex flex-1 justify-center px-5 pt-7 pb-8 lg:items-center lg:px-16 lg:py-12">
+                  <div className="w-full max-w-[360px] lg:max-w-[460px]">
                     <div
                       className={cn(
-                        "mb-7",
+                        "mb-7 lg:mb-8",
                         filling ? "max-lg:animate-in max-lg:fade-in max-lg:slide-in-from-bottom-2 max-lg:duration-500" : "max-lg:hidden",
                       )}
                     >
-                      <h1 id={section.headingId} className="text-3xl font-semibold tracking-tight text-balance lg:text-4xl">
+                      <h1 id={section.headingId} className="text-3xl font-semibold tracking-tight text-balance lg:text-5xl lg:leading-tight">
                         {section.title}
                       </h1>
-                      <p className="mt-2 text-muted-foreground">{section.intro}</p>
+                      <p className="mt-2 text-muted-foreground lg:mt-3 lg:text-lg">{section.intro}</p>
                     </div>
                     <Suspense>{section.form}</Suspense>
                   </div>
                 </div>
-                <footer className="hidden px-8 pb-6 text-sm text-muted-foreground lg:block">
-                  © {year} {name}
-                </footer>
               </section>
             ))}
+          </div>
+        </div>
+
+        {/* Laptop: the photo tile, inset in the card, glides over the inactive form with a message for the other one. */}
+        <div
+          className={cn(
+            "absolute top-3 bottom-3 end-3 z-20 hidden w-[calc(50%-0.75rem)] overflow-hidden rounded-[22px] bg-illustration transition-transform duration-700 motion-reduce:transition-none lg:block",
+            EASE,
+            isUp && "-translate-x-full rtl:translate-x-full",
+          )}
+        >
+          <div
+            aria-hidden
+            className={cn(
+              // The photo fills the lower part of the tile and fades in at its top edge, leaving
+              // plain mint above for the message.
+              "absolute -inset-x-[10%] top-[30%] bottom-0 [mask-image:linear-gradient(to_bottom,transparent,black_18%)] transition-transform duration-700 motion-reduce:transition-none",
+              EASE,
+              isUp && "translate-x-[8%] rtl:-translate-x-[8%]",
+            )}
+          >
+            <Image src={IMAGE} alt="" fill fetchPriority="high" sizes="50vw" className={cn("object-cover object-[100%_50%]", IMAGE_TONE)} />
+          </div>
+          <div className="absolute inset-0 grid">
+            {invites.map((invite) => {
+              const shown = invite.mode === mode;
+              return (
+                <div
+                  key={invite.mode}
+                  inert={!shown}
+                  className={cn(
+                    "[grid-area:1/1] flex flex-col items-start px-14 pt-14 text-start transition-opacity motion-reduce:transition-none",
+                    // The old message leaves fast; the new one arrives once the tile has mostly moved.
+                    shown ? "opacity-100 delay-300 duration-300" : "opacity-0 duration-150",
+                  )}
+                >
+                  <p className="max-w-[17ch] text-4xl leading-tight font-semibold tracking-tight text-balance">{invite.title}</p>
+                  <p className="mt-4 max-w-[32ch] text-lg text-muted-foreground">{invite.body}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -161,26 +215,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
           © {year} {name}
         </p>
       </div>
-
-      {/* Laptop: the image panel covers the inactive half and slides; the image inside moves the other way. */}
-      <div
-        aria-hidden
-        className={cn(
-          "absolute inset-y-0 end-0 z-20 hidden w-1/2 overflow-hidden bg-illustration transition-transform duration-700 motion-reduce:transition-none lg:block",
-          EASE,
-          isUp && "-translate-x-full rtl:translate-x-full",
-        )}
-      >
-        <div
-          className={cn(
-            "absolute inset-y-0 -inset-x-[10%] transition-transform duration-700 motion-reduce:transition-none",
-            EASE,
-            isUp && "translate-x-[8%] rtl:-translate-x-[8%]",
-          )}
-        >
-          <Image src={IMAGE} alt="" fill fetchPriority="high" sizes="60vw" className={cn("object-cover object-[100%_50%]", IMAGE_TONE)} />
-        </div>
-      </div>
     </div>
   );
 }
+
