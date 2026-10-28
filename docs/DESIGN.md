@@ -87,7 +87,16 @@ Rules: one green for every action; the struggle button in deep green ink; red on
 3. Headings large and calm, one primary green action per screen, everything else quiet.
 4. Show the design (screenshots or the running page) and get the owner's OK before committing.
 
-## 9. Known follow-ups
+## 9. The app frame (signed-in screens)
+
+Approved 2026-10-28. Code: `src/components/shared/app-shell.tsx`.
+
+- **Laptop:** the sage ground; a row above the card with the logo at the start, Home / Goals / Progress / Settings as soft pills (the current one on `bg-background` with a small shadow), and the ink **I'm struggling** button (rounded, life-buoy icon) at the end. The page sits in the large rounded card (28px, the sign-in shadow), 64px side padding; the year below the card.
+- **Home only:** the card keeps a mint tile (22px, 12px inset) at its end side, 32% wide, with the **week rhythm**: the number of times the person struggled and kept going (96px), a strip of the last seven days (a dot per step done, a ring per time they kept going, today outlined in the action green), then steps and focus minutes. A week with nothing in it shows "Your week starts with one step." and the empty strip, never a zero. Every other page uses the whole card.
+- **Phone:** no card. The logo row on top; the sections in a floating rounded bar at the bottom; I'm struggling as a round ink button just above it. Home shows the week rhythm as a compact mint card at the top.
+- **Page headings:** `PageHeader` (`src/components/shared/page-header.tsx`), the sign-in sizes: 48px on a laptop, 30px on a phone, intro below.
+
+## 10. Known follow-ups
 
 - In dark mode the tile shows a visible edge where the dimmed picture meets the plain area above the message. Postponed by the owner on 2026-10-28; a tested fix (blending the picture into the tile with multiply) is in the session notes if wanted.
 - Fixed 2026-10-28: the flag left the tile on sign-up. Sign-up now crossfades to `auth-journey-wide.png`.

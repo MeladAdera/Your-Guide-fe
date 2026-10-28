@@ -14,7 +14,8 @@ You are the senior frontend developer on **Your Guide**, a web app that helps pe
 1. Foundation: project setup, English/Arabic with RTL, typed API client with error codes, auth gate and start-up routing, app shell, settings, placeholder pages, tests.
 2. Sign-in feature, checked against the real API: `/sign-in`, `/sign-up`, `/signed-out`. Email typo hint, show/hide password, Caps Lock warning, language and timezone choice at sign-up, a calm 60-second countdown after too many attempts, an expired-session notice, logging out clears device data.
 3. The look of the whole app: palette "path green" (ink #0F3D35, action #2F6B47, ground #F4F6F2, mint #D6EBDC, dark theme derived), Figtree + IBM Plex Sans Arabic, the logo and the journey illustration.
-4. **The approved sign-in design, which is the reference for every page:** on a laptop, a large rounded card on a sage ground holds both forms; an inset mint photo tile with a message glides between sign-in and sign-up. Phones: a hero with the picture, the form in a sheet. Code: `src/features/auth/components/auth-shell.tsx`.
+4. **The app frame (2026-10-28):** the sign-in row above one card on every signed-in page, I'm struggling always in reach, and on Home a mint tile with the week rhythm (`docs/DESIGN.md` §9).
+5. **The approved sign-in design, which is the reference for every page:** on a laptop, a large rounded card on a sage ground holds both forms; an inset mint photo tile with a message glides between sign-in and sign-up. Phones: a hero with the picture, the form in a sheet. Code: `src/features/auth/components/auth-shell.tsx`.
 
 **How I want you to work (rules):**
 - Every page uses the same colours, type and feeling as the sign-in screen (`docs/DESIGN.md`).
@@ -25,11 +26,9 @@ You are the senior frontend developer on **Your Guide**, a web app that helps pe
 - Ask me with clear options when a choice is mine.
 
 **Next steps:**
-1. Small fixes on the sign-in screen, each shown to me before committing: in the sign-up state the flag leaves the tile's picture; in dark mode the tile shows an edge where the dimmed picture meets the plain area.
-2. Bring the app frame (top bar, phone bottom bar, Settings, placeholder pages) to the sign-in look so signing in does not feel like entering another app.
-3. Onboarding (7 short screens about the person, then the first goal): its spec exists but predates the new design; redraw it in this look, show me, then build.
-4. Then follow `docs/ROADMAP.md`: first goal and goals list, goal detail with tasks and steps, home, focus session, I'm struggling, progress, profile and polish, hardening and deploy (Vercel).
+1. Onboarding (7 short screens about the person, then the first goal): its spec exists but predates the new design; redraw it in this look, show me, then build.
+2. Then follow `docs/ROADMAP.md`: first goal and goals list, goal detail with tasks and steps, home, focus session, I'm struggling, progress, profile and polish, hardening and deploy (Vercel).
 
-**Open items:** confirm the licence of the journey picture (it looks like an Untitled UI demo image); test the phone keyboard behaviour on a real iPhone; "Forgot password", Google sign-in, "Remember me" and a full name wait for backend support; the landing page is paused until I have a direction.
+**Open items:** the dark-mode edge on the sign-in tile (postponed); review the Arabic wording of the week rhythm; confirm the licence of the journey picture (it looks like an Untitled UI demo image); test the phone keyboard behaviour on a real iPhone; "Forgot password", Google sign-in, "Remember me" and a full name wait for backend support; the landing page is paused until I have a direction.
 
 Start by reading the files above, then tell me in a few lines where we are and ask which next step to take.

@@ -14,7 +14,7 @@ Done (foundation, 9 commits on `main`):
 - App shell (top nav on laptop, bottom bar on phone), settings (language, theme, logout).
 - Placeholder pages for everything that comes next, so navigation never 404s.
 
-Sign-in pages done (feature 0, `docs/features/00-auth.md`), checked against the local API on 2026-10-27. The landing page is paused until the owner has a direction.
+Sign-in pages done (feature 0, `docs/features/00-auth.md`), checked against the local API on 2026-10-27. The app frame and Home's week rhythm tile done on 2026-10-28 (`DESIGN.md` §9). The landing page is paused until the owner has a direction.
 
 ## The loop for every feature
 

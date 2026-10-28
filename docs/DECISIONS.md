@@ -23,6 +23,16 @@ Dated, so a later reader knows when and why. The backend's own decisions live in
 - In the browser, any 401 from any route dispatches a window event; a listener sends the person to `/sign-in?next=<path>&reason=expired`.
 - `/` is the start-up router from handoff §7: me → onboarding → goals → active session → home.
 
+## 2026-10-28 · The app frame and the week rhythm
+
+- **Frame: the sign-in row above one card.** Of three drawn frames (the sign-in row, a side rail, the card with a permanent mint tile) the owner chose the row: signing in then feels like entering the same place. Not taken: the side rail, more room for sections but less like the sign-in screen.
+- **I'm struggling is always one tap away:** at the end of the row on a laptop, a round ink button above the bottom bar on a phone. Not taken: a floating button on every size (covers content, looks like a chat widget) or a fifth nav item (looks like just another page).
+- **The mint tile lives on Home only and shows the week rhythm, not the photo.** The owner compared four contents (your own path, a helper with the goal's why, the week rhythm, a kind word) and chose the rhythm: the headline number is the one the product exists for (handoff §13). Repeating the photo on every page was rejected.
+- **An empty week shows a kind line, not 0.** A big zero on day one reads like failing.
+- **The tile reads `GET /api/progress?days=7` with the key `['progress', 7]`**, the same key the Progress page will use, so they share one request. On an error the tile shows the empty week: it is encouragement, not a place for an error message.
+- **Weekday letters come from the API's `YYYY-MM-DD` string formatted in UTC** (`src/features/progress/week-days.ts`), so the browser's timezone can never shift the day.
+- **Shared code stays free of features:** the layout passes the tile into `AppShell` as `homeTile` instead of the shell importing it.
+
 ## 2026-10-28 · The sign-in screen is the design reference
 
 The owner approved the sign-in screen (a large rounded card on a sage ground, an inset mint photo tile that glides between sign-in and sign-up) and made it the rule: every page uses the same colours, type and feeling. The reference, with screenshots, tokens, type scale, shapes and motion, is [DESIGN.md](./DESIGN.md). Designs are shown to the owner before they are committed.
