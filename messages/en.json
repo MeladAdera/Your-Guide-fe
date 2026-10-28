@@ -231,6 +231,31 @@
         "6_10": "6–10 years",
         "over_10": "Over 10 years"
       }
+    },
+    "startWith": "Start with: “{phrase}…”",
+    "charCount": "{count} / {max}",
+    "questions": {
+      "typicalDay": "What does your typical day look like?",
+      "wantToChange": "What would you most like to change?",
+      "satisfiedWith": "What part of your life are you satisfied with?",
+      "wishMoreTimeFor": "What do you wish you had more time for?",
+      "proudOf": "Something you achieved, got through, or surprised yourself with.",
+      "whatWasHard": "What was difficult about it?",
+      "learnedAboutSelf": "What did you learn about yourself from it?",
+      "oftenPostpone": "What do you keep postponing or avoiding?",
+      "lessonFromMistake": "A mistake or regret that taught you something.",
+      "patternToChange": "A habit or pattern you would like to change.",
+      "whoIAm": "Describe yourself honestly. Who are you at this point in your life?",
+      "goodAt": "What are you naturally good at?",
+      "othersComeToMeFor": "What do other people usually come to you for?",
+      "stillFiguringOut": "What are you still trying to understand about yourself?"
+    },
+    "starters": {
+      "typicalDay": "Most days I",
+      "wantToChange": "I'd like to change",
+      "proudOf": "Once, I managed to",
+      "oftenPostpone": "I keep putting off",
+      "whoIAm": "Right now, I am someone who"
     }
   },
   "home": {

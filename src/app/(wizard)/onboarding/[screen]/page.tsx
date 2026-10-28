@@ -3,10 +3,12 @@ import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/shared/page-header";
 import { BasicsForm } from "@/features/onboarding/components/basics-form";
+import { TextScreenForm } from "@/features/onboarding/components/text-screen-form";
 import { PrimaryAction, WizardFooter } from "@/features/onboarding/components/wizard-footer";
 import { WizardFrame } from "@/features/onboarding/components/wizard-frame";
 import { countryOptions } from "@/features/onboarding/countries";
 import { nextHref, prevHref, savedFlags, screenOf, stepOf } from "@/features/onboarding/screens";
+import { isTextScreen } from "@/features/onboarding/text-screens";
 import { serverApi, serverApiOrNull } from "@/lib/api/server";
 import type { BasicsSection, OnboardingStatus } from "@/lib/api/types";
 
@@ -50,9 +52,17 @@ export default async function OnboardingScreenPage({ params }: PageProps<"/onboa
     );
   }
 
+  if (isTextScreen(screen) && back) {
+    return (
+      <WizardFrame {...frame}>
+        <TextScreenForm screen={screen} slug={slug} saved={saved as Record<string, unknown> | null} back={back} next={nextHref(screen)} />
+      </WizardFrame>
+    );
+  }
+
   return (
     <WizardFrame {...frame}>
-      {/* The questions of each screen arrive in build steps 3 to 5. */}
+      {/* The questions of the last two screens arrive in build steps 4 and 5. */}
       <p className="rounded-[18px] p-5 text-muted-foreground ring-1 ring-border">{t("questionsNext")}</p>
       <WizardFooter
         secondary={isFirst ? { href: nextHref(screen), label: t("skipForNow") } : { href: back, label: t("back") }}

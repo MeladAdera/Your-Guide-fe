@@ -27,8 +27,10 @@ export function MoreQuestions({ count, defaultOpen, children }: { count: number;
           <span className="flex items-center gap-2 font-medium">
             <Plus className="size-4 text-primary" aria-hidden /> {t("addMore")}
           </span>
-          <span className="flex items-center gap-1 text-sm text-muted-foreground">
-            {t("optionalCount", { count })} <ChevronDown className="size-4" aria-hidden />
+          <span className="flex shrink-0 items-center gap-1 text-sm text-muted-foreground">
+            {/* On a phone the count would squeeze the label onto two lines; the arrow says enough. */}
+            <span className="max-sm:sr-only">{t("optionalCount", { count })}</span>
+            <ChevronDown className="size-4" aria-hidden />
           </span>
         </button>
       )}
