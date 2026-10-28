@@ -71,7 +71,7 @@ Rules: one green for every action; the struggle button in deep green ink; red on
 
 ## 6. Imagery
 
-- One illustration family: the journey picture (`public/images/auth-journey.png`) and the logo (`public/images/logo.svg`, the bending path with a point on it, one green for both themes).
+- One illustration family: the journey picture (`public/images/auth-journey.png`, plus `auth-journey-wide.png`, the same picture with more mint around the flag, which the sign-up tile crossfades to so the flag stays in frame) and the logo (`public/images/logo.svg`, the bending path with a point on it, one green for both themes).
 - No stock photos, no emoji, no gradient washes. A fade is allowed only to blend the picture into its own mint.
 - In dark mode the picture is dimmed with a filter.
 
@@ -89,6 +89,6 @@ Rules: one green for every action; the struggle button in deep green ink; red on
 
 ## 9. Known follow-ups
 
-- In dark mode the tile shows a visible edge where the dimmed picture meets the plain area above the message. Needs a matching dark tone or a softer fade (owner to approve).
-- In the sign-up state the tile's picture shifts and the flag can leave the frame; a smaller shift would keep it.
+- In dark mode the tile shows a visible edge where the dimmed picture meets the plain area above the message. Postponed by the owner on 2026-10-28; a tested fix (blending the picture into the tile with multiply) is in the session notes if wanted.
+- Fixed 2026-10-28: the flag left the tile on sign-up. Sign-up now crossfades to `auth-journey-wide.png`.
 - The picture looks like an Untitled UI demo image: confirm the licence before launch.

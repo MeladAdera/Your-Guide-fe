@@ -20,6 +20,8 @@ function modeOf(pathname: string): Mode {
 }
 
 const IMAGE = "/images/auth-journey.png";
+/** The same picture with more mint above and right of the flag. */
+const IMAGE_WIDE = "/images/auth-journey-wide.png";
 const EASE = "ease-[cubic-bezier(0.77,0,0.18,1)]";
 /** The illustration is light mint; in dark mode it is dimmed so it sits in the dark ground. */
 const IMAGE_TONE = "dark:brightness-[0.45] dark:saturate-[0.7]";
@@ -178,6 +180,20 @@ export function AuthShell({ children }: { children: ReactNode }) {
             )}
           >
             <Image src={IMAGE} alt="" fill fetchPriority="high" sizes="50vw" className={cn("object-cover object-[100%_50%]", IMAGE_TONE)} />
+            {/* Sign-up drifts the photo right, which would push the flag out of the tile, so it
+                crossfades to a version with more mint around the flag. */}
+            <Image
+              src={IMAGE_WIDE}
+              alt=""
+              fill
+              sizes="50vw"
+              className={cn(
+                "object-cover object-[100%_50%] transition-opacity duration-700 motion-reduce:transition-none",
+                EASE,
+                IMAGE_TONE,
+                !isUp && "opacity-0",
+              )}
+            />
           </div>
           <div className="absolute inset-0 grid">
             {invites.map((invite) => {
