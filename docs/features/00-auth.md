@@ -2,7 +2,7 @@
 
 Status: spec 2026-10-27 · building 2026-10-27 · verified 2026-10-27 (local API, both languages, phone and laptop) · done 2026-10-27
 
-Design: option 4 on the sign-in canvas (the owner's reference, redrawn in ink and cobalt): https://claude.ai/artifact/EiiHptVzGuE948hWdJwEp4
+Design (current, 2026-10-28): the owner's reference (split screen, journey illustration) and the owner's auth-screen spec: one sliding shell for /sign-in and /sign-up. See §9 for what changed and why. Earlier design history: https://claude.ai/artifact/EiiHptVzGuE948hWdJwEp4
 
 ## 1. Job
 
@@ -12,9 +12,9 @@ Let a person create an account, log in, and log out, in English or Arabic, on a 
 
 | Route | What it shows | Reached from |
 | --- | --- | --- |
-| `/register` | Create an account | `/login`, links |
-| `/login` | Log in; a notice when the person was signed out by an expired session | the proxy (no cookie), the 401 listener, `/signed-out`, links |
-| `/signed-out` | Confirmation after logging out | the Log out button |
+| `/sign-up` | Create an account (was `/register`) | `/sign-in`, links |
+| `/sign-in` | Sign in (was `/login`); a notice when the person was signed out by an expired session | the proxy (no cookie), the 401 listener, `/signed-out`, links |
+| `/signed-out` | Confirmation after logging out; outside the (auth) group with its own simple frame | the Log out button |
 
 All three share the **auth frame**: the form on one side, the path track on the other.
 
@@ -108,3 +108,17 @@ Register sends `timezone` (detected or chosen) and `locale` (the language showin
 - Backend: send `Retry-After` with 429 so the countdown can be exact.
 - Someone still signed in who opens `/signed-out` by typing the address sees "You're signed out" while the session is still valid. Options: log out on that page too, or redirect signed-in visitors to `/`. Small; decide with the settings page.
 - The picture files can be replaced by a designer's illustration at the same paths (`public/images/auth/path-light.svg`, `path-dark.svg`).
+
+## 9. Redesign 2026-10-28: the sliding shell
+
+The owner asked the whole app to take the reference's look and gave a spec for the auth screens. Built as specified, with these decisions (owner's answers on 2026-10-28):
+
+- **Look:** palette "path green" and Figtree for Latin across the app (see DECISIONS.md). The illustration is `public/images/auth-journey.png`, the logo `public/images/logo.svg` (one green that reads on both grounds).
+- **One shell, two routes.** `src/features/auth/components/auth-shell.tsx` lives in the (auth) layout and renders both forms and the image. The pages only export titles and return null, so the layout stays mounted and switching is a CSS transition. Mode comes from the pathname; any other path throws. The inactive form is `inert`.
+- **Laptop:** the image panel covers the inactive half and slides in 700ms (`cubic-bezier(0.77, 0, 0.18, 1)`); the image inside extends 10% each side and moves 8% the other way. Object position `100% 50%`, checked with screenshots: ball and flag visible in both states at 1280×800; at 1920×1080 the flag pole shows in the sign-up state but the right part of the cloth is cut, a limit of 8% parallax on a landscape image in a tall panel.
+- **Phone:** `intro` (hero image, headline, form sheet overlapping by 24px) and `filling` (hero collapses to the logo row, the form heading appears, the image sits at the bottom). Only a spacer's height animates. Only focusing an input, select or textarea starts `filling`: a tapped button or link also takes focus, and moving the layout under the finger would make the tap miss.
+- **Image once per viewport:** each `next/image` stays lazy with `fetchPriority="high"` (the Next 16 docs' advice when several images exist per breakpoint); `preload` or eager loading would fetch the hidden copy too. Verified: one request on a phone, one on a laptop.
+- **Kept from the first build (owner's choice):** the forms still call the API with react-hook-form and zod; errors, the rate-limit countdown, the expired notice, language and timezone at sign-up and the typo hint stay. Field ids carry `signin-` / `signup-` prefixes because both forms are in the page.
+- **Hidden until the backend supports them (owner's choice):** Continue with Google, Forgot password, Remember me (sessions already last 30 days), Full name.
+- **Adapted from the spec:** files live in `src/features/auth/components/` (the project's feature folders) rather than `components/auth/`; the EN / AR control switches the language for real instead of being UI only; the theme switch is not on the auth screens (it stays in Settings).
+- **Not verifiable here:** the iPhone Safari keyboard check (done-when #7) needs a real device.

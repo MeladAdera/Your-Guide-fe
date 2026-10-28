@@ -11,7 +11,7 @@ Dated, so a later reader knows when and why. The backend's own decisions live in
 - **Tests.** Vitest + Testing Library for logic and forms; Playwright for the main arc against the local API.
 - **Hosting.** Vercel. `/api/*` is rewritten to `API_URL`; the API runs with `TRUST_PROXY`.
 
-## 2026-10-22 · Colour: option E, "ink and cobalt"
+## 2026-10-22 · Colour: option E, "ink and cobalt" (replaced 2026-10-28)
 
 Five directions were drawn and checked (contrast, colour-vision simulation, chart validation). The owner chose E:
 
@@ -36,12 +36,22 @@ Tokens are in `src/app/globals.css`. If the cobalt feels loud in use, pull its s
 - In the browser, any 401 from any route dispatches a window event; a listener sends the person to `/login?next=<path>`.
 - `/` is the start-up router from handoff §7: me → onboarding → goals → active session → home.
 
+## 2026-10-28 · Palette "path green" and Figtree (replaces option E)
+
+The owner chose to fit the whole app to the sign-in reference (a winding path, a ball, a flag on mint).
+
+- **Colours** (tokens in `src/app/globals.css`): foreground #0F3D35 (deep green ink), primary #2F6B47 (every action, link, focus ring), background #F4F6F2 (pale sage), illustration mint #D6EBDC. The owner gave those four; the rest (muted text, borders, accent, states, charts, the whole dark theme) are derived and checked: every text pair 4.5:1 or better, every control edge 3:1, in both themes.
+- **Dark mode stays**, with derived greens (primary #7FC79A on #0E1613); the mint illustration is dimmed with a CSS filter in dark mode.
+- **Fonts:** Figtree for Latin (closest to the reference's rounded geometric sans), IBM Plex Sans Arabic for Arabic, IBM Plex Mono for small labels.
+- **Logo:** `public/images/logo.svg`, the path mark, in the app shell and on the auth screens.
+- Why the change: the owner wants one look across the product, taken from the reference they chose. Option E's reasoning (one accent, the struggle button in solid ink) carries over: one green for actions, the struggle button in deep green ink.
+
 ## 2026-10-27 · Sign-in pages and device data
 
 Details and reasons in [features/00-auth.md](./features/00-auth.md). App-wide parts:
 
 - **The working method is page by page**: ideas first, the owner picks; then design options, the owner picks; then the build. The next page starts from what the previous one settled.
-- **Sign-in frame**: form on the start side, a static picture (a winding track, cobalt ball) on the end side, a band of it on phones. Static images on purpose: the owner chose no animation and no 3D. Mirrored in Arabic.
+- **Sign-in screens** (updated 2026-10-28): one sliding shell for /sign-in and /sign-up; see features/00-auth.md §9.
 - **Everything the app stores in the browser uses the `yg:` prefix** (`src/lib/device-data.ts`), so logging out can remove all of it. Any feature that writes to local or session storage must use that prefix.
 - **A rate limit is a pause, not an error**: a calm note and a 60-second countdown on the button.
 
