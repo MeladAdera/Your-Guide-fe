@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart3, Home, Settings, Target } from "lucide-react";
+import { BarChart3, Home, LifeBuoy, Settings, Target } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -17,53 +17,81 @@ const NAV = [
 ] as const;
 
 /**
- * The frame around every signed-in screen: brand, the four sections, and the
- * I'm struggling button, which is the one solid-ink element on the page.
- * On phones the sections move to a bottom bar.
+ * The frame around every signed-in screen, built from the sign-in screen
+ * (docs/DESIGN.md): the sage ground, a row above the card with the logo, the
+ * four sections and the I'm struggling button, the work in one large rounded
+ * card. On Home the card keeps a mint tile at its end side (`homeTile`, the
+ * week's rhythm, passed in by the layout so shared code stays free of
+ * features); every other screen gets the whole card.
+ *
+ * Phones drop the card: the logo row on top, the sections in a floating bar at
+ * the bottom, and I'm struggling as a round ink button just above it.
  */
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, homeTile }: { children: ReactNode; homeTile?: ReactNode }) {
   const t = useTranslations();
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  const withTile = homeTile != null && isActive("/home");
+  const year = new Date().getFullYear();
 
   return (
-    <div className="flex min-h-full flex-col">
-      <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="mx-auto flex h-14 w-full max-w-5xl items-center gap-4 px-4">
-          <Link href="/home" className="rounded-md">
-            <BrandMark name={t("app.name")} className="text-base" />
+    <div className="flex min-h-dvh flex-col bg-background lg:bg-muted">
+      <header className="flex h-17 items-center gap-8 px-5 lg:h-auto lg:px-10 lg:py-5">
+        <Link href="/home" className="rounded-md">
+          <BrandMark name={t("app.name")} />
+        </Link>
+        <nav aria-label={t("nav.label")} className="hidden items-center gap-1 lg:flex">
+          {NAV.map(({ href, key }) => (
+            <Link
+              key={href}
+              href={href}
+              aria-current={isActive(href) ? "page" : undefined}
+              className={cn(
+                "rounded-full px-4 py-2 text-[15px] text-muted-foreground transition-colors hover:text-foreground",
+                isActive(href) && "bg-background font-medium text-foreground shadow-sm",
+              )}
+            >
+              {t(`nav.${key}`)}
+            </Link>
+          ))}
+        </nav>
+        <Button asChild variant="ink" className="ms-auto hidden h-10 rounded-full px-5 text-[15px] lg:inline-flex">
+          <Link href="/struggling">
+            <LifeBuoy aria-hidden />
+            {t("nav.struggling")}
           </Link>
-          <nav aria-label={t("nav.home")} className="hidden items-center gap-1 sm:flex">
-            {NAV.map(({ href, key, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                aria-current={isActive(href) ? "page" : undefined}
-                className={cn(
-                  "flex h-9 items-center gap-2 rounded-md px-3 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
-                  isActive(href) && "bg-accent font-medium text-accent-foreground",
-                )}
-              >
-                <Icon className="size-4" aria-hidden />
-                {t(`nav.${key}`)}
-              </Link>
-            ))}
-          </nav>
-          <div className="ms-auto flex items-center gap-2">
-            <Button asChild variant="ink" size="sm">
-              <Link href="/struggling">{t("nav.struggling")}</Link>
-            </Button>
-          </div>
-        </div>
+        </Button>
       </header>
 
-      <main id="content" className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 pb-24 sm:pb-8">
-        {children}
-      </main>
+      <div
+        className={cn(
+          "flex-1 lg:mx-8 lg:mb-2 lg:rounded-[28px] lg:bg-background lg:shadow-[0_30px_80px_-30px_rgb(15_61_53/0.35)]",
+          withTile && "lg:grid lg:grid-cols-[minmax(0,1fr)_32%]",
+        )}
+      >
+        <main id="content" className="min-w-0 px-5 pt-2 pb-32 lg:px-16 lg:py-14">
+          {children}
+        </main>
+        {withTile && (
+          <aside className="hidden p-3 lg:block">
+            {homeTile}
+          </aside>
+        )}
+      </div>
 
+      <footer className="hidden px-10 py-4 text-sm text-muted-foreground lg:block">
+        © {year} {t("app.name")}
+      </footer>
+
+      {/* Phone: I'm struggling floats just above the section bar. */}
+      <Button asChild variant="ink" className="fixed end-4 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 size-14 rounded-full shadow-lg lg:hidden">
+        <Link href="/struggling" aria-label={t("nav.struggling")}>
+          <LifeBuoy className="size-6" aria-hidden />
+        </Link>
+      </Button>
       <nav
-        aria-label={t("nav.home")}
-        className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] sm:hidden"
+        aria-label={t("nav.label")}
+        className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-20 rounded-full bg-background/95 shadow-[0_10px_40px_-12px_rgb(15_61_53/0.35)] ring-1 ring-border backdrop-blur lg:hidden"
       >
         <ul className="grid grid-cols-4">
           {NAV.map(({ href, key, icon: Icon }) => (
@@ -72,7 +100,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 href={href}
                 aria-current={isActive(href) ? "page" : undefined}
                 className={cn(
-                  "flex h-14 flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground",
+                  "flex h-16 flex-col items-center justify-center gap-1 rounded-full text-[11px] text-muted-foreground",
                   isActive(href) && "font-medium text-primary",
                 )}
               >

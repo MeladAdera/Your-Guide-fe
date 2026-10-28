@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/shared/app-shell";
 import { UserProvider } from "@/components/shared/user-provider";
+import { WeekRhythm } from "@/features/progress/components/week-rhythm";
 import { serverApiOrNull } from "@/lib/api/server";
 import type { User } from "@/lib/api/types";
 
@@ -13,7 +14,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
   if (!user) redirect("/sign-in");
   return (
     <UserProvider user={user}>
-      <AppShell>{children}</AppShell>
+      <AppShell homeTile={<WeekRhythm variant="tile" />}>{children}</AppShell>
     </UserProvider>
   );
 }
