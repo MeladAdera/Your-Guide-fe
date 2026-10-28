@@ -18,8 +18,8 @@ export default async function AuthLayout({ children }: LayoutProps<"/">) {
           <BrandMark name={t("name")} className="whitespace-nowrap" />
           <LocaleSwitch />
         </header>
-        <div className="relative h-40 overflow-hidden bg-muted lg:hidden">
-          <AuthArt priority />
+        <div className="relative h-40 overflow-hidden bg-illustration lg:hidden">
+          <AuthArt preload />
         </div>
         <main id="content" className="mx-auto flex w-full max-w-sm flex-1 flex-col px-4 pt-8 pb-10 lg:justify-center lg:py-10">
           {children}
@@ -31,7 +31,7 @@ export default async function AuthLayout({ children }: LayoutProps<"/">) {
           <ThemeToggle />
         </footer>
       </div>
-      <aside aria-hidden className="relative hidden overflow-hidden bg-muted lg:block">
+      <aside aria-hidden className="relative hidden overflow-hidden bg-illustration lg:block">
         <AuthArt />
       </aside>
     </div>

@@ -2,18 +2,13 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /**
- * The sign-in pages' picture: a winding track with a cobalt ball resting on it.
- * A plain static image, one file per theme, so a designer can replace the
- * files without touching code. Decorative: empty alt. Mirrored in Arabic so the
- * track runs in reading direction. When the frame is wider than the picture
- * (the phone band) the crop centres on the ball.
+ * The sign-in illustration: a winding path, a white ball, a flag. Decorative.
+ * Replaced by the sliding auth shell in the next step.
  */
-export function AuthArt({ className, priority }: { className?: string; priority?: boolean }) {
-  const img = "object-cover object-[50%_66%] rtl:-scale-x-100";
+export function AuthArt({ className, preload }: { className?: string; preload?: boolean }) {
   return (
-    <div aria-hidden className={cn("absolute inset-0", className)}>
-      <Image src="/images/auth/path-light.svg" alt="" fill unoptimized priority={priority} sizes="50vw" className={cn(img, "dark:hidden")} />
-      <Image src="/images/auth/path-dark.svg" alt="" fill unoptimized priority={priority} sizes="50vw" className={cn(img, "hidden dark:block")} />
+    <div aria-hidden className={cn("absolute inset-0 bg-illustration", className)}>
+      <Image src="/images/auth-journey.png" alt="" fill preload={preload} sizes="50vw" className="object-cover object-[85%_50%] dark:brightness-[0.6] dark:saturate-[0.8]" />
     </div>
   );
 }

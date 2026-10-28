@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
+import { BrandMark } from "@/components/shared/brand-mark";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -29,9 +30,8 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-full flex-col">
       <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center gap-4 px-4">
-          <Link href="/home" className="flex items-center gap-2 font-semibold tracking-tight">
-            <span aria-hidden className="size-4 rounded-[5px] bg-primary" />
-            {t("app.name")}
+          <Link href="/home" className="rounded-md">
+            <BrandMark name={t("app.name")} className="text-base" />
           </Link>
           <nav aria-label={t("nav.home")} className="hidden items-center gap-1 sm:flex">
             {NAV.map(({ href, key, icon: Icon }) => (
