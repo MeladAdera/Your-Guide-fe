@@ -18,7 +18,18 @@ const LABELS: Record<Locale, string> = { en: "English", ar: "العربية" };
  * The language switch. The new language shows at once (cookie + refresh); when
  * logged in, the account follows with PATCH /api/auth/me (docs/handoff.md §4).
  */
-export function LocaleSwitch({ className, block, labelledBy }: { className?: string; block?: boolean; labelledBy?: string }) {
+export function LocaleSwitch({
+  className,
+  block,
+  compact,
+  labelledBy,
+}: {
+  className?: string;
+  block?: boolean;
+  /** Two small text buttons, "EN / AR", for tight headers. */
+  compact?: boolean;
+  labelledBy?: string;
+}) {
   const current = useLocale() as Locale;
   const router = useRouter();
   const user = useOptionalUser();
@@ -34,6 +45,28 @@ export function LocaleSwitch({ className, block, labelledBy }: { className?: str
     setLocaleCookie(locale);
     router.refresh();
     if (user) follow.mutate(locale);
+  }
+
+  if (compact) {
+    return (
+      <div role="group" aria-label={t("common.language")} className={cn("flex items-center text-sm text-muted-foreground", className)}>
+        {LOCALES.map((locale, i) => (
+          <span key={locale} className="flex items-center">
+            {i > 0 ? <span aria-hidden className="px-1">/</span> : null}
+            <button
+              type="button"
+              lang={locale}
+              aria-label={LABELS[locale]}
+              aria-pressed={locale === current}
+              onClick={() => choose(locale)}
+              className={cn("rounded px-1 py-2 uppercase hover:text-foreground", locale === current && "font-semibold text-foreground")}
+            >
+              {locale}
+            </button>
+          </span>
+        ))}
+      </div>
+    );
   }
 
   return (

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Check, Circle } from "lucide-react";
+import { Check, Circle, Mail } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -12,10 +12,10 @@ import { Field } from "@/components/shared/field";
 import { FormError } from "@/components/shared/form-error";
 import { Input } from "@/components/ui/input";
 import { authApi, browserTimezone } from "@/features/auth/api";
-import { registerSchema, type RegisterValues } from "@/features/auth/schemas";
 import { suggestEmail } from "@/features/auth/email-suggest";
-import { cn } from "@/lib/utils";
+import { registerSchema, type RegisterValues } from "@/features/auth/schemas";
 import { LocaleSwitch } from "@/features/settings/components/locale-switch";
+import { cn } from "@/lib/utils";
 import { PasswordInput } from "./password-input";
 import { SubmitButton } from "./submit-button";
 import { TimezoneField } from "./timezone-field";
@@ -23,7 +23,12 @@ import { useAuthForm } from "./use-auth-form";
 
 const noSubscribe = () => () => {};
 
-export function RegisterForm() {
+/**
+ * Create an account (docs/features/00-auth.md). Sits in the auth shell next
+ * to the sign-in form; ids carry a `signup-` prefix because both forms are in
+ * the page at once.
+ */
+export function SignUpForm() {
   const t = useTranslations("auth");
   const te = useTranslations("errors");
   const search = useSearchParams();
@@ -37,7 +42,7 @@ export function RegisterForm() {
   });
 
   const next = search.get("next");
-  const loginHref = next ? `/sign-in?next=${encodeURIComponent(next)}` : "/sign-in";
+  const signInHref = next ? `/sign-in?next=${encodeURIComponent(next)}` : "/sign-in";
   const { errors, touchedFields } = form.formState;
   const emailTaken = errors.email?.message === "auth.email_taken";
   const [email, password] = useWatch({ control: form.control, name: ["email", "password"] });
@@ -52,6 +57,7 @@ export function RegisterForm() {
   return (
     <form
       noValidate
+      aria-labelledby="signup-heading"
       className="grid gap-5"
       onSubmit={form.handleSubmit((values) => {
         setFormError(null);
@@ -59,17 +65,22 @@ export function RegisterForm() {
       })}
     >
       <FormError error={formError} />
-      <Field id="email" label={t("email")} error={emailTaken ? undefined : errors.email?.message}>
-        <Input
-          id="email"
-          type="email"
-          autoComplete="email"
-          inputMode="email"
-          dir="ltr"
-          aria-invalid={!!errors.email}
-          aria-describedby={errors.email ? "email-error" : undefined}
-          {...form.register("email")}
-        />
+      <Field id="signup-email" label={t("email")} error={emailTaken ? undefined : errors.email?.message}>
+        <div className="relative" dir="ltr">
+          <Mail aria-hidden className="pointer-events-none absolute start-3.5 top-1/2 size-4.5 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            id="signup-email"
+            type="email"
+            required
+            autoComplete="email"
+            inputMode="email"
+            dir="ltr"
+            className="h-12 ps-11"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "signup-email-error" : undefined}
+            {...form.register("email")}
+          />
+        </div>
         {suggestion && !emailTaken ? (
           <p className="text-sm text-muted-foreground">
             <span dir="auto">{t("emailSuggest", { email: suggestion })}</span>{" "}
@@ -83,39 +94,44 @@ export function RegisterForm() {
           </p>
         ) : null}
         {emailTaken ? (
-          <p id="email-error" role="alert" className="text-sm text-destructive">
+          <p id="signup-email-error" role="alert" className="text-sm text-destructive">
             {te("auth.email_taken")}{" "}
-            <Link href={loginHref} className="font-medium underline underline-offset-4">
+            <Link href={signInHref} className="font-medium underline underline-offset-4">
               {t("register.toLogin")}
             </Link>
           </p>
         ) : null}
       </Field>
-      <Field id="password" label={t("password")} error={errors.password?.message}>
+      <Field id="signup-password" label={t("password")} error={errors.password?.message}>
         <PasswordInput
-          id="password"
+          id="signup-password"
+          required
           autoComplete="new-password"
           aria-invalid={!!errors.password}
-          aria-describedby={errors.password ? "password-error password-rule" : "password-rule"}
+          aria-describedby={errors.password ? "signup-password-error signup-password-rule" : "signup-password-rule"}
           {...form.register("password")}
         />
-        <p id="password-rule" aria-live="polite" className={cn("flex items-center gap-1.5 text-sm", passwordMet ? "text-success-ink" : "text-muted-foreground")}>
+        <p
+          id="signup-password-rule"
+          aria-live="polite"
+          className={cn("flex items-center gap-1.5 text-sm", passwordMet ? "text-success-ink" : "text-muted-foreground")}
+        >
           {passwordMet ? <Check aria-hidden className="size-4" strokeWidth={2.5} /> : <Circle aria-hidden className="size-3.5" />}
           {passwordMet ? t("passwordMet") : t("passwordHint")}
         </p>
       </Field>
       <div className="grid gap-1.5">
-        <p id="speaks-label" className="text-sm font-medium">
+        <p id="signup-speaks" className="text-sm font-medium">
           {t("register.speaks")}
         </p>
-        <LocaleSwitch block labelledBy="speaks-label" />
+        <LocaleSwitch block labelledBy="signup-speaks" />
       </div>
       {timezone ? <TimezoneField value={timezone} onChange={setChosenTimezone} /> : null}
       <SubmitButton label={t("register.submit")} pending={register.isPending} cooldownSeconds={cooldownSeconds} />
       <p className="text-sm text-muted-foreground">{t("register.privacy")}</p>
       <p className="text-center text-sm text-muted-foreground">
         {t("register.hasAccount")}{" "}
-        <Link href={loginHref} className="font-medium text-primary underline-offset-4 hover:underline">
+        <Link href={signInHref} className="font-medium text-primary underline-offset-4 hover:underline">
           {t("register.toLogin")}
         </Link>
       </p>
