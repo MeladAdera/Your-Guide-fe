@@ -188,7 +188,50 @@
     "skipForNow": "Skip for now",
     "saveAndContinue": "Save and continue",
     "saveAndWriteGoal": "Save and write my first goal",
-    "questionsNext": "The questions for this screen come in the next build step."
+    "questionsNext": "The questions for this screen come in the next build step.",
+    "addMore": "Add more, if you like",
+    "optionalCount": "{count, plural, one {# optional question} other {# optional questions}}",
+    "basics": {
+      "situation": "What is your situation right now?",
+      "occupation": "What do you do now, in your words?",
+      "age": "Age range",
+      "education": "Education",
+      "experience": "Years of experience",
+      "country": "Country",
+      "countryNone": "Choose a country",
+      "employment": {
+        "student": "Student",
+        "employed": "Employed",
+        "self_employed": "Self-employed",
+        "between_jobs": "Between jobs",
+        "caregiver": "Caregiver",
+        "retired": "Retired",
+        "other": "Other"
+      },
+      "ages": {
+        "under_18": "Under 18",
+        "18_24": "18–24",
+        "25_34": "25–34",
+        "35_44": "35–44",
+        "45_54": "45–54",
+        "55_plus": "55+"
+      },
+      "educations": {
+        "secondary": "Secondary school",
+        "vocational": "Vocational",
+        "bachelor": "Bachelor's",
+        "master": "Master's",
+        "doctorate": "Doctorate",
+        "other": "Other"
+      },
+      "years": {
+        "none": "None yet",
+        "under_2": "Under 2 years",
+        "2_5": "2–5 years",
+        "6_10": "6–10 years",
+        "over_10": "Over 10 years"
+      }
+    }
   },
   "home": {
     "title": "Home",

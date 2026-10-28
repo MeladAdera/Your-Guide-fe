@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/shared/page-header";
-import { WizardFooter, PrimaryAction } from "@/features/onboarding/components/wizard-footer";
+import { BasicsForm } from "@/features/onboarding/components/basics-form";
+import { PrimaryAction, WizardFooter } from "@/features/onboarding/components/wizard-footer";
 import { WizardFrame } from "@/features/onboarding/components/wizard-frame";
+import { countryOptions } from "@/features/onboarding/countries";
 import { nextHref, prevHref, savedFlags, screenOf, stepOf } from "@/features/onboarding/screens";
-import { serverApi } from "@/lib/api/server";
-import type { OnboardingStatus } from "@/lib/api/types";
+import { serverApi, serverApiOrNull } from "@/lib/api/server";
+import type { BasicsSection, OnboardingStatus } from "@/lib/api/types";
 
 export async function generateMetadata({ params }: PageProps<"/onboarding/[screen]">): Promise<Metadata> {
   const { screen } = await params;
@@ -31,13 +33,26 @@ export default async function OnboardingScreenPage({ params }: PageProps<"/onboa
 
   const screen = screenOf(slug);
   if (!screen) notFound();
-  const status = await serverApi<OnboardingStatus>("/api/profile/onboarding");
+  const [status, saved] = await Promise.all([
+    serverApi<OnboardingStatus>("/api/profile/onboarding"),
+    // 404 profile.screen_not_saved means "start empty".
+    serverApiOrNull<unknown>(`/api/profile/sections/${slug}`, ["profile.screen_not_saved"]),
+  ]);
   const back = prevHref(screen);
   const isFirst = back === null;
+  const frame = { step: stepOf(screen), saved: savedFlags(status), title: t(`screens.${screen}`), why: t(`why.${screen}`) };
+
+  if (screen === "basics") {
+    return (
+      <WizardFrame {...frame}>
+        <BasicsForm saved={saved as BasicsSection | null} next={nextHref(screen)} countries={countryOptions(await getLocale())} />
+      </WizardFrame>
+    );
+  }
 
   return (
-    <WizardFrame step={stepOf(screen)} saved={savedFlags(status)} title={t(`screens.${screen}`)} why={t(`why.${screen}`)}>
-      {/* The questions of each screen arrive in build steps 2 to 5. */}
+    <WizardFrame {...frame}>
+      {/* The questions of each screen arrive in build steps 3 to 5. */}
       <p className="rounded-[18px] p-5 text-muted-foreground ring-1 ring-border">{t("questionsNext")}</p>
       <WizardFooter
         secondary={isFirst ? { href: nextHref(screen), label: t("skipForNow") } : { href: back, label: t("back") }}
