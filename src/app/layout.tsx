@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Figtree, IBM_Plex_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
@@ -10,8 +10,9 @@ import { directionOf, type Locale } from "@/i18n/config";
 import { QueryProvider } from "@/components/shared/query-provider";
 import "./globals.css";
 
-// IBM Plex: one design across Latin and Arabic, so mixed text reads evenly.
-const plex = IBM_Plex_Sans({ subsets: ["latin", "latin-ext"], weight: ["400", "500", "600"], variable: "--font-plex", display: "swap" });
+// Figtree for Latin (the rounded geometric sans of the sign-in reference), IBM
+// Plex Sans Arabic for Arabic, Plex Mono for small labels and numbers.
+const figtree = Figtree({ subsets: ["latin", "latin-ext"], weight: ["400", "500", "600", "700"], variable: "--font-figtree", display: "swap" });
 const plexArabic = IBM_Plex_Sans_Arabic({ subsets: ["arabic", "latin"], weight: ["400", "500", "600"], variable: "--font-plex-arabic", display: "swap" });
 const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
 
@@ -28,8 +29,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f8fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#141619" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f6f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e1613" },
   ],
 };
 
@@ -39,7 +40,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const t = await getTranslations("common");
   return (
     // suppressHydrationWarning: next-themes sets the theme class on <html> before React hydrates.
-    <html lang={locale} dir={dir} suppressHydrationWarning className={`${plex.variable} ${plexArabic.variable} ${plexMono.variable} h-full antialiased`}>
+    <html lang={locale} dir={dir} suppressHydrationWarning className={`${figtree.variable} ${plexArabic.variable} ${plexMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <NextIntlClientProvider>

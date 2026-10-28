@@ -5,10 +5,12 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Your Guide colour system, option E "ink and cobalt" (docs/DECISIONS.md).
-  True-grey neutrals, near-black ink, one cobalt for every action, the struggle
-  button in solid ink. Values are sRGB hex derived from OKLCH; every text pair
-  is 4.5:1 or better and every control edge 3:1 or better in both themes.
+  Your Guide colour system, "path green" (docs/DECISIONS.md, 2026-10-28).
+  Taken from the sign-in reference: deep green ink for headings, one forest
+  green for every action, a pale sage ground, mint behind the illustration.
+  Light values for primary, foreground and background are the owner's; the
+  rest are derived. Every text pair is 4.5:1 or better and every control edge
+  3:1 or better in both themes (checked when written).
 */
 
 @theme inline {
@@ -20,8 +22,9 @@
   --color-success: var(--success);
   --color-success-ink: var(--success-ink);
   --color-warning: var(--warning);
-  --font-sans: var(--font-plex), var(--font-plex-arabic), ui-sans-serif, system-ui, sans-serif;
-  --font-arabic: var(--font-plex-arabic), var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --color-illustration: var(--illustration);
+  --font-sans: var(--font-figtree), var(--font-plex-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: var(--font-plex-arabic), var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -64,90 +67,93 @@
 
 :root {
   /* ground */
-  --background: #f7f8fa;
-  --foreground: #13161b;
+  --background: #f4f6f2;
+  --foreground: #0f3d35;
   --card: #ffffff;
-  --card-foreground: #13161b;
+  --card-foreground: #0f3d35;
   --popover: #ffffff;
-  --popover-foreground: #13161b;
+  --popover-foreground: #0f3d35;
   /* text steps: foreground (ink), muted-foreground (ink 2), subtle (ink 3) */
-  --muted: #edeff0;
-  --muted-foreground: #51555c;
-  --subtle: #686c72;
-  --secondary: #edeff0;
-  --secondary-foreground: #13161b;
+  --muted: #e7ece6;
+  --muted-foreground: #4a5c55;
+  --subtle: #5a6a64;
+  --secondary: #e7ece6;
+  --secondary-foreground: #0f3d35;
   /* the one hue */
-  --primary: #285cc2;
+  --primary: #2f6b47;
   --primary-foreground: #ffffff;
-  --accent: #e2ecfd;
-  --accent-foreground: #1346ab;
-  --ring: #285cc2;
-  /* the struggle button: solid ink, no hue */
-  --ink: #13161b;
-  --ink-foreground: #f7f8fa;
-  /* states: green only on done, amber only as an icon, red only destructive */
-  --success: #267b4c;
-  --success-ink: #0a693c;
+  --accent: #dcebe0;
+  --accent-foreground: #245437;
+  --ring: #2f6b47;
+  /* the struggle button: solid deep green ink */
+  --ink: #0f3d35;
+  --ink-foreground: #f4f6f2;
+  /* states */
+  --success: #2f7d4f;
+  --success-ink: #1f6b3e;
   --warning: #b86a28;
   --destructive: #ab413e;
   /* lines: border for dividers, input for control edges (3:1) */
-  --border: #d9dbdd;
-  --input: #86898d;
-  /* charts: cobalt, ink, grey; each measure on its own chart */
-  --chart-1: #2e62c9;
-  --chart-2: #2b2e33;
-  --chart-3: #86898f;
-  --chart-4: #b1b4b9;
-  --chart-5: #d9dbdd;
+  --border: #d5ddd6;
+  --input: #7e8c85;
+  /* behind the illustration while it loads */
+  --illustration: #d6ebdc;
+  /* charts: green, ink, grey; each measure on its own chart */
+  --chart-1: #2f6b47;
+  --chart-2: #0f3d35;
+  --chart-3: #8a9a92;
+  --chart-4: #b9c6be;
+  --chart-5: #d5ddd6;
   --radius: 0.625rem;
   --sidebar: #ffffff;
-  --sidebar-foreground: #13161b;
-  --sidebar-primary: #285cc2;
+  --sidebar-foreground: #0f3d35;
+  --sidebar-primary: #2f6b47;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #edeff0;
-  --sidebar-accent-foreground: #13161b;
-  --sidebar-border: #d9dbdd;
-  --sidebar-ring: #285cc2;
+  --sidebar-accent: #e7ece6;
+  --sidebar-accent-foreground: #0f3d35;
+  --sidebar-border: #d5ddd6;
+  --sidebar-ring: #2f6b47;
 }
 
 .dark {
-  --background: #141619;
-  --foreground: #edeef1;
-  --card: #1e1f22;
-  --card-foreground: #edeef1;
-  --popover: #1e1f22;
-  --popover-foreground: #edeef1;
-  --muted: #27292c;
-  --muted-foreground: #b1b4b9;
-  --subtle: #8c8f94;
-  --secondary: #27292c;
-  --secondary-foreground: #edeef1;
-  --primary: #7daafd;
-  --primary-foreground: #0a111f;
-  --accent: #202e47;
-  --accent-foreground: #9bbeff;
-  --ring: #7daafd;
-  --ink: #edeef1;
-  --ink-foreground: #141619;
-  --success: #68b986;
-  --success-ink: #74c692;
+  --background: #0e1613;
+  --foreground: #e6efe9;
+  --card: #152019;
+  --card-foreground: #e6efe9;
+  --popover: #152019;
+  --popover-foreground: #e6efe9;
+  --muted: #1d2a23;
+  --muted-foreground: #a9bab0;
+  --subtle: #86978e;
+  --secondary: #1d2a23;
+  --secondary-foreground: #e6efe9;
+  --primary: #7fc79a;
+  --primary-foreground: #0b2417;
+  --accent: #1e3a2a;
+  --accent-foreground: #a8ddba;
+  --ring: #7fc79a;
+  --ink: #e6efe9;
+  --ink-foreground: #0e1613;
+  --success: #6fc08e;
+  --success-ink: #7fd09d;
   --warning: #d9985a;
   --destructive: #ed8c84;
-  --border: #383b3e;
-  --input: #696c71;
-  --chart-1: #6290e7;
-  --chart-2: #ccced0;
-  --chart-3: #6f7276;
-  --chart-4: #4a4d52;
-  --chart-5: #383b3e;
-  --sidebar: #1e1f22;
-  --sidebar-foreground: #edeef1;
-  --sidebar-primary: #7daafd;
-  --sidebar-primary-foreground: #0a111f;
-  --sidebar-accent: #27292c;
-  --sidebar-accent-foreground: #edeef1;
-  --sidebar-border: #383b3e;
-  --sidebar-ring: #7daafd;
+  --border: #2a3a31;
+  --input: #66786e;
+  --illustration: #1b2a22;
+  --chart-1: #7fc79a;
+  --chart-2: #cfe0d5;
+  --chart-3: #6e8077;
+  --chart-4: #3e5046;
+  --chart-5: #2a3a31;
+  --sidebar: #152019;
+  --sidebar-foreground: #e6efe9;
+  --sidebar-primary: #7fc79a;
+  --sidebar-primary-foreground: #0b2417;
+  --sidebar-accent: #1d2a23;
+  --sidebar-accent-foreground: #e6efe9;
+  --sidebar-border: #2a3a31;
+  --sidebar-ring: #7fc79a;
 }
 
 @layer base {
