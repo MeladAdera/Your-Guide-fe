@@ -40,6 +40,8 @@ Use the tokens, never hex values in components (`bg-background`, `text-foregroun
 | Done | `success-ink` | #1F6B3E | #7FD09D | Done checks only |
 | Destructive, errors | `destructive` | #AB413E | #ED8C84 | Errors and delete only |
 
+Dark mode: the owner compared four dark palettes on the sign-in page on 2026-10-28 and chose the current one (near-black green card #0E1613 on a #1D2A23 ground, action #7FC79A, the picture dimmed with a filter). Keep it.
+
 Rules: one green for every action; the struggle button in deep green ink; red only for errors and deleting; text 4.5:1 or better, control edges 3:1 or better in both themes (checked when the palette was made).
 
 ## 3. Type

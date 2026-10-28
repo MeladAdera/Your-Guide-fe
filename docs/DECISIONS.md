@@ -27,6 +27,10 @@ Dated, so a later reader knows when and why. The backend's own decisions live in
 
 The owner approved the sign-in screen (a large rounded card on a sage ground, an inset mint photo tile that glides between sign-in and sign-up) and made it the rule: every page uses the same colours, type and feeling. The reference, with screenshots, tokens, type scale, shapes and motion, is [DESIGN.md](./DESIGN.md). Designs are shown to the owner before they are committed.
 
+## 2026-10-28 · Dark mode stays as derived
+
+Four dark palettes were shown on the real sign-in page (the current one, "deep forest", "moonlit sage", "charcoal and green"). The owner kept the current one: near-black green surfaces, the lighter action green #7FC79A, the picture dimmed with a CSS filter. The tile's edge under the message in dark mode remains an open follow-up.
+
 ## 2026-10-28 · Palette "path green" and Figtree
 
 The colours and type of the approved sign-in screen, used across the app (details in [DESIGN.md](./DESIGN.md)).
