@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 /** The API's session cookie (docs/handoff.md §4). Its presence is a hint, never proof. */
 const SESSION_COOKIE = "your_guide_session";
-const PUBLIC_PATHS = ["/login", "/register", "/signed-out"];
+const PUBLIC_PATHS = ["/sign-in", "/sign-up", "/signed-out"];
 
 /**
  * Optimistic check only: a request with no session cookie cannot be logged in,
@@ -16,7 +16,7 @@ export function proxy(request: NextRequest) {
   if (request.cookies.has(SESSION_COOKIE)) return NextResponse.next();
 
   const login = request.nextUrl.clone();
-  login.pathname = "/login";
+  login.pathname = "/sign-in";
   login.search = "";
   if (pathname !== "/") login.searchParams.set("next", `${pathname}${search}`);
   return NextResponse.redirect(login);

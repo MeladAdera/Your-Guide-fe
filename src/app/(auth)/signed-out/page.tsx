@@ -29,7 +29,7 @@ export default async function SignedOutPage() {
           </li>
         ))}
       </ul>
-      <Link href="/login" className={cn(buttonVariants({ size: "lg" }))}>
+      <Link href="/sign-in" className={cn(buttonVariants({ size: "lg" }))}>
         {t("again")}
       </Link>
     </div>

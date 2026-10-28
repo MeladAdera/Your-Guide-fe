@@ -8,7 +8,7 @@ import { ONBOARDING_SCREEN_PATHS, ONBOARDING_SCREENS, type Goal, type Onboarding
  */
 export default async function StartPage() {
   const user = await serverApiOrNull<User>("/api/auth/me", ["auth.not_logged_in", "401"]);
-  if (!user) redirect("/login");
+  if (!user) redirect("/sign-in");
 
   const onboarding = await serverApi<OnboardingStatus>("/api/profile/onboarding");
   if (!onboarding.completed) {

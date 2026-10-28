@@ -13,10 +13,10 @@ export function UnauthorizedListener() {
   const pathname = usePathname();
   useEffect(() => {
     const onUnauthorized = () => {
-      if (pathname.startsWith("/login") || pathname.startsWith("/register")) return;
+      if (pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up")) return;
       const next = encodeURIComponent(pathname);
       // `reason=expired` lets the login page say why the person is there.
-      router.replace(`/login?next=${next}&reason=expired`);
+      router.replace(`/sign-in?next=${next}&reason=expired`);
     };
     window.addEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
     return () => window.removeEventListener(UNAUTHORIZED_EVENT, onUnauthorized);

@@ -37,7 +37,7 @@ export function RegisterForm() {
   });
 
   const next = search.get("next");
-  const loginHref = next ? `/login?next=${encodeURIComponent(next)}` : "/login";
+  const loginHref = next ? `/sign-in?next=${encodeURIComponent(next)}` : "/sign-in";
   const { errors, touchedFields } = form.formState;
   const emailTaken = errors.email?.message === "auth.email_taken";
   const [email, password] = useWatch({ control: form.control, name: ["email", "password"] });

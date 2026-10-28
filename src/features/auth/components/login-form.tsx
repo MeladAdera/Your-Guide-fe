@@ -28,7 +28,7 @@ export function LoginForm() {
   });
 
   const next = search.get("next");
-  const registerHref = next ? `/register?next=${encodeURIComponent(next)}` : "/register";
+  const registerHref = next ? `/sign-up?next=${encodeURIComponent(next)}` : "/sign-up";
   const { errors } = form.formState;
 
   return (

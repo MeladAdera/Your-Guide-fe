@@ -10,7 +10,7 @@ import type { User } from "@/lib/api/types";
  */
 export default async function AppLayout({ children }: LayoutProps<"/">) {
   const user = await serverApiOrNull<User>("/api/auth/me", ["auth.not_logged_in", "401"]);
-  if (!user) redirect("/login");
+  if (!user) redirect("/sign-in");
   return (
     <UserProvider user={user}>
       <AppShell>{children}</AppShell>
