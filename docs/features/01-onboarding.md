@@ -1,6 +1,6 @@
 # 01 · Onboarding wizard
 
-Status: **spec** (2026-10-22) · building · verified · done
+Status: **spec** (2026-10-22, design approved 2026-10-28) · building · verified · done
 
 ## 1. Job
 
@@ -27,29 +27,33 @@ Reached from: `/` (the start-up router sends a new account to `basics`, a return
 
 ## 3. What is on the page
 
-Every screen shares one frame, the **wizard shell**:
+**Design approved by the owner on 2026-10-28** (drawn in a temporary preview, compared against a one-question-at-a-time look and a plain column). Every screen shares one frame, the **wizard shell**, built from the sign-in screen (`docs/DESIGN.md`):
 
-1. **Progress line**: a thin seven-segment bar; saved screens filled, the current one half, the rest empty. Below it the text `Step n of 7` (`onboarding.stepOf`).
-2. **Title** of the screen (`onboarding.screens.*`) and **one "why" line** that says why the app asks (`onboarding.why.*`, frontend copy, see §9).
-3. **The questions**, required first, optional ones marked "(optional)". Each question is a label; under required long questions nothing else, under optional ones nothing else. No placeholders inside the fields except where noted; the label carries the question.
-4. **Footer**, sticky at the bottom on phones: **Back** (ghost, hidden on screen 1) and **Save and continue** (primary, `xl`). On screen 1 also **Skip for now** (link) because basics is optional. On screen 7 the primary button reads **Save and write my first goal**.
+1. **No app navigation.** Above the card only the logo and EN / AR, as on sign-in.
+2. **Laptop: the sign-in layout.** The card holds the questions on the start side and a mint tile (38% wide, 12px inset, sticky while the questions scroll) on the end side. The tile shows "Why we ask" and the screen's why line in large type (`onboarding.why.*`, §9), a drawn path of seven points (saved screens filled, the current one ringed, the rest faint) ending at a flag that stands for the first goal, and "n of 7 saved · your first goal waits at the flag".
+3. **Phone: no tile.** A thin seven-segment line with `Step n of 7` at the top, the title, the why line under it in muted text, then the questions.
+4. **Title** of the screen (`onboarding.screens.*`): 48px on a laptop with `Step n of 7` above it, 30px on a phone.
+5. **The questions:** only the required ones show at first. The optional ones sit in a collapsed row **"Add more, if you like · n optional questions"** that opens in place, so every screen looks short. Optional labels carry a small "optional".
+6. **Footer**, fixed at the bottom on phones: **Back** (ghost) and **Save and continue** (primary, arrow). On screen 1 **Skip for now** takes Back's place. On screen 7 the primary button reads **Save and write my first goal**.
 
 The one primary action per screen is Save and continue.
 
 ### Screen 1 · Basics
 
+Large rounded tap chips (44px tall, full radius); a chosen chip turns action green with a tick. Shown at first: the situation chips, the occupation field and the age chips. Education, years of experience and country sit under "Add more, if you like".
+
 | Element | Field | Control | Limit |
 | --- | --- | --- | --- |
 | "What is your situation right now?" | `employmentStatus` | 7 chips, single choice (radio group): student, employed, self-employed, between jobs, caregiver, retired, other | required if saved |
-| "Age range" | `ageRange` | 6 chips | optional |
-| "Education" | `educationLevel` | 6 chips | optional |
-| "Years of experience" | `yearsExperience` | 5 chips | optional |
-| "Country" | `country` | native select, names from `Intl.DisplayNames` in the current language, sorted | optional, ISO alpha-2 |
 | "What do you do now, in your words?" | `occupation` | single-line text, `dir="auto"` | ≤120 |
+| "Age range" | `ageRange` | 6 chips | optional |
+| "Education" | `educationLevel` | 6 chips, under "Add more" | optional |
+| "Years of experience" | `yearsExperience` | 5 chips, under "Add more" | optional |
+| "Country" | `country` | native select, names from `Intl.DisplayNames` in the current language, sorted, under "Add more" | optional, ISO alpha-2 |
 
 ### Screens 2–5 · Text screens
 
-One shared component, `TextScreen`, fed by a per-screen definition. Each question is a multi-line text area that grows with its content, `dir="auto"`, with a character count that appears once the text passes 80% of the limit.
+One shared component, `TextScreen`, fed by a per-screen definition. Each question is a multi-line text area (rounded 12px, on `bg-card`) that grows with its content, `dir="auto"`, with a character count that appears once the text passes 80% of the limit. Under each required question a small mint **starter** chip ("Start with: “I keep putting off…”") puts its phrase into an empty field and places the cursor after it, for the moment the page feels blank (§9 lists the phrases).
 
 | Screen | Required | Optional | Limit |
 | --- | --- | --- | --- |
@@ -60,11 +64,11 @@ One shared component, `TextScreen`, fed by a per-screen definition. Each questio
 
 ### Screen 6 · Quick check-in
 
-Eight statements in the handoff's exact English wording, each a radio group of five options from 1 (strongly disagree) to 5 (strongly agree). On phones the five options are a row of equal buttons with the two end labels above the row; every option has an accessible name (strongly disagree, disagree, neither, agree, strongly agree). Nothing is computed from the answers and nothing is shown after saving. The why line says so.
+**One statement at a time.** Eight statements in the handoff's exact English wording. Above the statement a small eight-segment line with "3 of 8"; the statement in large type (30px laptop, 24px phone); below it five full-width answers stacked as a radio group: Strongly disagree, Disagree, Not sure, Agree, Strongly agree (1 to 5). Tapping an answer marks it (green with a tick) and moves to the next statement after a short pause; Back goes to the previous statement before it leaves the screen. Save and continue is enabled once all eight have an answer. The statement index is component state, not the URL; on return the screen opens at the first unanswered statement. Nothing is computed from the answers and nothing is shown after saving. The why line says so. (Not taken: circles growing in size, chips per statement, a five-box bar.)
 
 ### Screen 7 · What matters to you
 
-1. **Values**: ten chips (`LIFE_VALUES`), multi-select, "n of 5 chosen" beside the label. Picking a chip reveals, under the chip row, a short text field for that value: "Why this one matters to you." (optional, ≤300). When five are chosen the unchosen chips are disabled. Fewer than two shows the `arrayMinSize` message on save.
+1. **Values**: ten chips (`LIFE_VALUES`), multi-select, "n of 5 chosen" beside the label "Your values". A tapped chip **rises** into a "Your values" list above the remaining chips: a soft accent panel per value with the green chip and a short field "Why this one matters to you (optional)" (≤300). Tapping the chip in the list puts it back. When five are chosen the remaining chips are disabled. Fewer than two shows the `arrayMinSize` message on save.
 2. `personToBecome` "What kind of person do you want to become?" (required, ≤1000).
 3. `wouldRegretNotDoing` "What would you regret not doing?" (optional).
 4. `rememberedFor` "What do you want people to remember about you?" (optional).
@@ -96,7 +100,9 @@ Phone (about 400px):
 +-------------------------------+
 ```
 
-Laptop (about 1024px): the same single column centred at 640px, the footer not sticky but at the end of the column. No second column. The app shell's navigation is hidden during the wizard; only the brand, the language switch and the theme toggle stay in the header.
+(The sketch above predates the approved design: the phone now has no mint strip and the optional questions are tucked, §3.)
+
+Laptop: the sign-in card, questions on the start side (up to 600px), the mint "Why we ask" tile with the path on the end side; the footer at the end of the questions, not fixed. The app shell's navigation is hidden during the wizard; only the logo and EN / AR stay above the card.
 
 States:
 
@@ -127,7 +133,7 @@ Payload rules from the handoff: PUT replaces the whole screen, so every field is
 3. **Server-side prefill, client-side save.** Reason: no spinner on screen open and no client cache to keep consistent; the URL is the state.
 4. **Native select for the country**, names from `Intl.DisplayNames`. Reason: no country list to translate, works well on phones, fully accessible. Alternative not taken: a searchable combobox, more code for a field that is optional.
 5. **One shared `TextScreen` component** for screens 2–5, driven by a definition (fields, limits, required). Reason: four screens with the same shape; copy stays in the message files.
-6. **Confidence options are five labelled radios per statement.** Visible labels only at the two ends on phones, all five in the accessible names. Reason: the API documents the ends; the middle needs names for screen readers.
+6. **Check-in one statement at a time, five worded answers** (owner's choice, 2026-10-28). Reason: eight agree/disagree rows are the most tiring part of the wizard; one at a time with big targets feels quick and invites an honest answer. Every answer is a visible word, so the accessible name is the label itself.
 7. **Validation mirrors the API limits in zod** (lengths, 2–5 values, each once) so server validation is the safety net.
 8. **Keyboard**: Ctrl/Cmd+Enter saves from inside a text area; Enter alone inserts a line.
 9. **Arabic wording convention**: questions and why lines are phrased with nominal or neutral forms where the language allows, never a gendered imperative. You review every Arabic question before it ships.
@@ -160,6 +166,17 @@ Why lines, English first, Arabic proposed for your review:
 | selfView | In your own words, with no labels. This shapes the advice you get when it is hard. | بكلماتك أنت، وبلا تصنيفات. هذا ما يشكّل النصيحة عندما يصعب الأمر. |
 | confidence | Eight statements, answered honestly. There is no score and no result. | ثماني عبارات تُجاب بصدق. لا توجد نتيجة ولا تقييم. |
 | values | What matters to you comes before what you plan. The point is what is truly yours, not what sounds good. | ما يهمّك يأتي قبل ما يُخطَّط له. المهم ما هو لك فعلاً، لا ما يبدو جيداً. |
+
+Starter phrases (one per required text question; English first, Arabic proposed):
+
+| Field | English | Arabic |
+| --- | --- | --- |
+| `typicalDay` | Most days I… | في معظم الأيام… |
+| `wantToChange` | I'd like to change… | أودّ أن يتغيّر… |
+| `proudOf` | Once, I managed to… | مرّةً، استطعتُ أن… |
+| `oftenPostpone` | I keep putting off… | ما زلتُ أؤجّل… |
+| `whoIAm` | Right now, I am someone who… | الآن، أنا شخص… |
+| `personToBecome` | I want to become someone who… | أريد أن أصبح شخصاً… |
 
 The questions themselves, the chip labels for the fixed lists, and the scale labels go into the same namespace during build step 2 to 5; the Arabic of each is flagged for your review in the pull of that step.
 
