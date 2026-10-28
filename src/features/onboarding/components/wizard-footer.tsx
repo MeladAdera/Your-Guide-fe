@@ -12,14 +12,18 @@ export function WizardFooter({
   secondary,
   primary,
 }: {
-  /** Back or Skip for now: a link, or nothing. */
-  secondary?: { href: string; label: string };
+  /** Back or Skip for now: a link, a button (Back inside the check-in), or nothing. */
+  secondary?: { href: string; label: string } | { onClick: () => void; label: string };
   /** The primary button, usually the form's submit. */
   primary: ReactNode;
 }) {
   return (
     <div className="mt-8 flex items-center justify-between gap-3 max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-10 max-lg:border-t max-lg:border-border max-lg:bg-background max-lg:px-5 max-lg:pt-3 max-lg:pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-      {secondary ? (
+      {secondary && "onClick" in secondary ? (
+        <Button type="button" variant="ghost" className="h-12 px-4 text-base" onClick={secondary.onClick}>
+          {secondary.label}
+        </Button>
+      ) : secondary ? (
         <Button asChild variant="ghost" className="h-12 px-4 text-base">
           <Link href={secondary.href}>{secondary.label}</Link>
         </Button>

@@ -10,7 +10,8 @@ import { onboardingApi } from "./api";
 /**
  * Saving one onboarding screen: PUT the whole screen, then go to the next one.
  * Field errors from the API land under the field they name (the first one gets
- * focus); anything else becomes one form-level error, with the text kept.
+ * focus); anything else, or any error on a screen without fields to point at,
+ * becomes one form-level error, with the answers kept.
  */
 export function useSectionSave<TBody, TForm extends FieldValues>({
   slug,
@@ -19,7 +20,7 @@ export function useSectionSave<TBody, TForm extends FieldValues>({
 }: {
   slug: string;
   next: string;
-  setError: UseFormSetError<TForm>;
+  setError?: UseFormSetError<TForm>;
 }) {
   const router = useRouter();
   const [formError, setFormError] = useState<unknown>(null);
@@ -29,7 +30,7 @@ export function useSectionSave<TBody, TForm extends FieldValues>({
     onMutate: () => setFormError(null),
     onSuccess: () => router.push(next),
     onError: (e) => {
-      if (isApiError(e) && e.code === "validation.failed") {
+      if (setError && isApiError(e) && e.code === "validation.failed") {
         const fields = Object.entries(e.fieldErrors());
         fields.forEach(([field, rule], i) => setError(field as Path<TForm>, { type: "server", message: rule }, { shouldFocus: i === 0 }));
         if (fields.length) return;

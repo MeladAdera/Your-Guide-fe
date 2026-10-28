@@ -256,6 +256,30 @@
       "proudOf": "Once, I managed to",
       "oftenPostpone": "I keep putting off",
       "whoIAm": "Right now, I am someone who"
+    },
+    "checkin": {
+      "position": "Statement {current} of {total}",
+      "hint": "Tap an answer to move on.",
+      "allAnswered": "All eight answered. You can still change any of them.",
+      "answerAll": "Answer all eight to continue.",
+      "scale": {
+        "1": "Strongly disagree",
+        "2": "Disagree",
+        "3": "Not sure",
+        "4": "Agree",
+        "5": "Strongly agree"
+      },
+      "statements": {
+        "canLearnIfPersist": "I can learn difficult things if I keep at them.",
+        "canTryAgain": "When I fail, I can usually try again.",
+        "followThrough": "I usually follow through on commitments I make to myself.",
+        "focusWithoutMotivation": "I can stay focused on something important even when I do not feel motivated.",
+        "actionsShapeFuture": "My actions can significantly improve my future.",
+        "doubtDespiteEvidence": "I often doubt my ability even when I have evidence that I can succeed.",
+        "avoidWhenAfraid": "I avoid difficult situations because I am afraid of failing.",
+        "compareTooMuch": "I compare myself with other people too much."
+      },
+      "previous": "Previous statement"
     }
   },
   "home": {

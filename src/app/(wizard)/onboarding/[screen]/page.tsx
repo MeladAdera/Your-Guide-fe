@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/shared/page-header";
 import { BasicsForm } from "@/features/onboarding/components/basics-form";
+import { ConfidenceForm } from "@/features/onboarding/components/confidence-form";
 import { TextScreenForm } from "@/features/onboarding/components/text-screen-form";
 import { PrimaryAction, WizardFooter } from "@/features/onboarding/components/wizard-footer";
 import { WizardFrame } from "@/features/onboarding/components/wizard-frame";
@@ -60,9 +61,17 @@ export default async function OnboardingScreenPage({ params }: PageProps<"/onboa
     );
   }
 
+  if (screen === "confidence" && back) {
+    return (
+      <WizardFrame {...frame}>
+        <ConfidenceForm saved={saved as Record<string, unknown> | null} back={back} next={nextHref(screen)} />
+      </WizardFrame>
+    );
+  }
+
   return (
     <WizardFrame {...frame}>
-      {/* The questions of the last two screens arrive in build steps 4 and 5. */}
+      {/* The questions of the last screen arrive in build step 5. */}
       <p className="rounded-[18px] p-5 text-muted-foreground ring-1 ring-border">{t("questionsNext")}</p>
       <WizardFooter
         secondary={isFirst ? { href: nextHref(screen), label: t("skipForNow") } : { href: back, label: t("back") }}
