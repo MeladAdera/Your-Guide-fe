@@ -28,7 +28,7 @@ The web app rewrites `/api/*` to `API_URL`, so the browser sees one origin and t
 ## Layout
 
 ```
-src/app              routes: (auth) login/register · (app) everything signed in · page.tsx = start-up router
+src/app              routes: (auth) sign-in/sign-up · signed-out · (app) everything signed in · page.tsx = start-up router
 src/components/ui    shadcn/ui components (Radix, RTL-aware)
 src/components       app components (shell, forms, settings, auth)
 src/lib/api          API client, types, error codes, server-side helper
@@ -42,5 +42,5 @@ docs                 handoff and decisions
 
 - **Translate by code, never by message.** API errors are `ApiError` with a `code`; the sentence comes from `messages/*.json` (`errors.<code>`, nested by the dots).
 - **User and AI text always gets `dir="auto"`.** App text follows the document direction.
-- **Only one hue.** Cobalt is for actions; the struggle button is solid ink; red is destructive only.
+- **One look.** The approved sign-in screen is the design reference (`docs/DESIGN.md`): one green for actions, the struggle button in deep green ink, red only for errors and deleting.
 - **Server Components call the API by `API_URL`** and forward the cookie (`src/lib/api/server.ts`); the browser uses relative `/api/...` paths.

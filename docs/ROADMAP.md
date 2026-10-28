@@ -7,7 +7,7 @@ How we build Your Guide's web app feature by feature, page by page. For each fea
 Done (foundation, 9 commits on `main`):
 
 - Project, tooling, tests: Next.js 16, Tailwind 4, shadcn/ui (Radix, RTL), Vitest, Playwright.
-- Design tokens for light and dark (option E, ink and cobalt), IBM Plex fonts, `/styleguide`.
+- Design tokens for light and dark (the path green palette from the approved sign-in screen, see `DESIGN.md`), Figtree and IBM Plex Sans Arabic, `/styleguide`.
 - English and Arabic with next-intl, cookie-based locale, `lang` and `dir` on the document.
 - API client with error codes translated by code, server-side helper, all response types.
 - Register, login, logout, auth gate, start-up routing (`/`), proxy for the return path.

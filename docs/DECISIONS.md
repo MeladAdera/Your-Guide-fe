@@ -11,19 +11,6 @@ Dated, so a later reader knows when and why. The backend's own decisions live in
 - **Tests.** Vitest + Testing Library for logic and forms; Playwright for the main arc against the local API.
 - **Hosting.** Vercel. `/api/*` is rewritten to `API_URL`; the API runs with `TRUST_PROXY`.
 
-## 2026-10-22 · Colour: option E, "ink and cobalt" (replaced 2026-10-28)
-
-Five directions were drawn and checked (contrast, colour-vision simulation, chart validation). The owner chose E:
-
-- True-grey neutrals, near-black ink for text, **one cobalt blue** for every primary action, link, active state and focus ring.
-- **The I'm struggling button is solid ink** (black on light, white on dark). It gets its identity from luminance contrast, not hue, so it stands out without the arousal a saturated accent brings.
-- The hero number ("struggled and continued") is ink, carried by size.
-- Green appears only on done states; amber only as an icon; **red only on destructive actions and validation errors**. Red never sits near the timer or the struggle button (Elliot et al., 2007).
-- Chart marks: cobalt, ink, grey. Each measure has its own chart and axis; minutes and counts never share one.
-- Light is the default (dark text on light reads more accurately); dark is a choice and is deep grey, not black.
-
-Tokens are in `src/app/globals.css`. If the cobalt feels loud in use, pull its saturation toward steel blue (#405D8A) without changing anything else.
-
 ## 2026-10-22 · Theme and language mechanics
 
 - **Theme**: `next-themes` with a class on `<html>`; three states (system, light, dark). A dimmed variant of the session screen is planned for the session slice.
@@ -32,23 +19,23 @@ Tokens are in `src/app/globals.css`. If the cobalt feels loud in use, pull its s
 
 ## 2026-10-22 · Auth gate
 
-- The `(app)` layout asks `GET /api/auth/me` server-side and redirects to `/login` on 401. Server calls go to `API_URL` directly and forward the incoming cookie (`src/lib/api/server.ts`).
-- In the browser, any 401 from any route dispatches a window event; a listener sends the person to `/login?next=<path>`.
+- The `(app)` layout asks `GET /api/auth/me` server-side and redirects to `/sign-in` on 401. Server calls go to `API_URL` directly and forward the incoming cookie (`src/lib/api/server.ts`).
+- In the browser, any 401 from any route dispatches a window event; a listener sends the person to `/sign-in?next=<path>&reason=expired`.
 - `/` is the start-up router from handoff §7: me → onboarding → goals → active session → home.
 
 ## 2026-10-28 · The sign-in screen is the design reference
 
 The owner approved the sign-in screen (a large rounded card on a sage ground, an inset mint photo tile that glides between sign-in and sign-up) and made it the rule: every page uses the same colours, type and feeling. The reference, with screenshots, tokens, type scale, shapes and motion, is [DESIGN.md](./DESIGN.md). Designs are shown to the owner before they are committed.
 
-## 2026-10-28 · Palette "path green" and Figtree (replaces option E)
+## 2026-10-28 · Palette "path green" and Figtree
 
-The owner chose to fit the whole app to the sign-in reference (a winding path, a ball, a flag on mint).
+The colours and type of the approved sign-in screen, used across the app (details in [DESIGN.md](./DESIGN.md)).
 
 - **Colours** (tokens in `src/app/globals.css`): foreground #0F3D35 (deep green ink), primary #2F6B47 (every action, link, focus ring), background #F4F6F2 (pale sage), illustration mint #D6EBDC. The owner gave those four; the rest (muted text, borders, accent, states, charts, the whole dark theme) are derived and checked: every text pair 4.5:1 or better, every control edge 3:1, in both themes.
 - **Dark mode stays**, with derived greens (primary #7FC79A on #0E1613); the mint illustration is dimmed with a CSS filter in dark mode.
 - **Fonts:** Figtree for Latin (closest to the reference's rounded geometric sans), IBM Plex Sans Arabic for Arabic, IBM Plex Mono for small labels.
 - **Logo:** `public/images/logo.svg`, the path mark, in the app shell and on the auth screens.
-- Why the change: the owner wants one look across the product, taken from the reference they chose. Option E's reasoning (one accent, the struggle button in solid ink) carries over: one green for actions, the struggle button in deep green ink.
+- Rules: one green for every action, the struggle button in deep green ink, red only for errors and deleting.
 
 ## 2026-10-27 · Sign-in pages and device data
 
