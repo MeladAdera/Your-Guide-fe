@@ -36,6 +36,10 @@ Tokens are in `src/app/globals.css`. If the cobalt feels loud in use, pull its s
 - In the browser, any 401 from any route dispatches a window event; a listener sends the person to `/login?next=<path>`.
 - `/` is the start-up router from handoff §7: me → onboarding → goals → active session → home.
 
+## 2026-10-28 · The sign-in screen is the design reference
+
+The owner approved the sign-in screen (a large rounded card on a sage ground, an inset mint photo tile that glides between sign-in and sign-up) and made it the rule: every page uses the same colours, type and feeling. The reference, with screenshots, tokens, type scale, shapes and motion, is [DESIGN.md](./DESIGN.md). Designs are shown to the owner before they are committed.
+
 ## 2026-10-28 · Palette "path green" and Figtree (replaces option E)
 
 The owner chose to fit the whole app to the sign-in reference (a winding path, a ball, a flag on mint).
