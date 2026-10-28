@@ -26,9 +26,11 @@
     "themeLight": "Light",
     "themeDark": "Dark",
     "skipToContent": "Skip to content",
-    "errorTitle": "Something went wrong"
+    "errorTitle": "Something went wrong",
+    "comingNext": "This screen comes in a later step. Everything around it already works."
   },
   "nav": {
+    "label": "Sections",
     "home": "Home",
     "goals": "Goals",
     "progress": "Progress",
@@ -191,5 +193,14 @@
     "struggle": "I'm struggling",
     "sample": "The quick brown fox jumps over the lazy dog.",
     "sampleAr": "صِف نفسك بصدق. من أنت في هذه المرحلة من حياتك؟"
+  },
+  "rhythm": {
+    "title": "This week",
+    "kept": "{count, plural, one {time you struggled and kept going} other {times you struggled and kept going}}",
+    "totals": "{steps, plural, one {# step} other {# steps}} · {minutes, plural, one {# focus minute} other {# focus minutes}}",
+    "emptyTitle": "Your week starts with one step.",
+    "emptyBody": "Every step you finish, and every time you keep going, shows up here.",
+    "dayLabel": "{day}: {steps, plural, one {# step} other {# steps}}, {kept, plural, =0 {did not need to push through} one {kept going once} other {kept going # times}}",
+    "today": "today"
   }
 }

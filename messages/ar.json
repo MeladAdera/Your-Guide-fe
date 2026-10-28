@@ -26,9 +26,11 @@
     "themeLight": "فاتح",
     "themeDark": "داكن",
     "skipToContent": "الانتقال إلى المحتوى",
-    "errorTitle": "حدث خطأ ما"
+    "errorTitle": "حدث خطأ ما",
+    "comingNext": "هذه الشاشة تأتي في خطوة لاحقة. كل ما حولها يعمل الآن."
   },
   "nav": {
+    "label": "الأقسام",
     "home": "الرئيسية",
     "goals": "الأهداف",
     "progress": "التقدّم",
@@ -191,5 +193,14 @@
     "struggle": "أواجه صعوبة",
     "sample": "صِف نفسك بصدق. من أنت في هذه المرحلة من حياتك؟",
     "sampleAr": "The quick brown fox jumps over the lazy dog."
+  },
+  "rhythm": {
+    "title": "هذا الأسبوع",
+    "kept": "مرّات المواصلة رغم الصعوبة",
+    "totals": "{steps, plural, zero {لا خطوات} one {خطوة واحدة} two {خطوتان} few {# خطوات} many {# خطوة} other {# خطوة}} · {minutes, plural, zero {لا دقائق تركيز} one {دقيقة تركيز واحدة} two {دقيقتا تركيز} few {# دقائق تركيز} many {# دقيقة تركيز} other {# دقيقة تركيز}}",
+    "emptyTitle": "أسبوعك يبدأ بخطوة واحدة.",
+    "emptyBody": "كل خطوة تُنجَز، وكل مواصلة رغم الصعوبة، تظهر هنا.",
+    "dayLabel": "{day}: {steps, plural, zero {لا خطوات} one {خطوة واحدة} two {خطوتان} few {# خطوات} many {# خطوة} other {# خطوة}}، {kept, plural, zero {دون تعثّر} one {مواصلة واحدة} two {مواصلتان} few {# مواصلات} many {# مواصلة} other {# مواصلة}}",
+    "today": "اليوم"
   }
 }
