@@ -163,7 +163,7 @@
   },
   "onboarding": {
     "screens": {
-      "basics": "Basics",
+      "basics": "A little about you",
       "situation": "Your days now",
       "achievements": "What you have done",
       "patterns": "What gets in the way",
@@ -172,7 +172,23 @@
       "values": "What matters to you",
       "goal": "Your first goal"
     },
-    "stepOf": "Step {current} of {total}"
+    "stepOf": "Step {current} of {total}",
+    "why": {
+      "basics": "A little context helps the advice fit your life.",
+      "situation": "Before any goal, a clear picture of where you are now.",
+      "achievements": "You have got through hard things before. This is where the app learns that.",
+      "patterns": "Naming what gets in the way makes it smaller.",
+      "selfView": "In your own words, with no labels. This shapes the advice you get when it is hard.",
+      "confidence": "Eight statements, answered honestly. There is no score and no result.",
+      "values": "What matters to you comes before what you plan."
+    },
+    "whyWeAsk": "Why we ask",
+    "savedOf": "{saved} of {total} saved · your first goal waits at the flag",
+    "back": "Back",
+    "skipForNow": "Skip for now",
+    "saveAndContinue": "Save and continue",
+    "saveAndWriteGoal": "Save and write my first goal",
+    "questionsNext": "The questions for this screen come in the next build step."
   },
   "home": {
     "title": "Home",

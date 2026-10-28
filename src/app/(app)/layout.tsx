@@ -1,17 +1,11 @@
-import { redirect } from "next/navigation";
 import { AppShell } from "@/components/shared/app-shell";
 import { UserProvider } from "@/components/shared/user-provider";
 import { WeekRhythm } from "@/features/progress/components/week-rhythm";
-import { serverApiOrNull } from "@/lib/api/server";
-import type { User } from "@/lib/api/types";
+import { requireUser } from "@/lib/api/server";
 
-/**
- * Every signed-in screen sits under this layout. The app learns whether someone
- * is logged in by asking the API (docs/handoff.md §4): 200 is a user, 401 is not.
- */
+/** Every signed-in screen except the onboarding wizard sits under this layout. */
 export default async function AppLayout({ children }: LayoutProps<"/">) {
-  const user = await serverApiOrNull<User>("/api/auth/me", ["auth.not_logged_in", "401"]);
-  if (!user) redirect("/sign-in");
+  const user = await requireUser();
   return (
     <UserProvider user={user}>
       <AppShell homeTile={<WeekRhythm variant="tile" />}>{children}</AppShell>
