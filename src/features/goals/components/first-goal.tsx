@@ -239,7 +239,11 @@ function Arrival({ goal }: { goal: Goal }) {
         </dl>
         <div className="max-w-[600px]">
           <p className="mt-10 rounded-[18px] bg-accent px-5 py-4 text-accent-foreground">{t("first.arrival.next")}</p>
-          <WizardFooter primary={<PrimaryAction href="/home">{t("first.arrival.home")}</PrimaryAction>} />
+          {/* The next real step is breaking the goal down; Home stays as the quiet second choice. */}
+          <WizardFooter
+            secondary={{ href: "/home", label: t("first.arrival.home") }}
+            primary={<PrimaryAction href={`/goals/${goal.id}`}>{t("first.arrival.tasks")}</PrimaryAction>}
+          />
         </div>
       </main>
 

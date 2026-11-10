@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -121,7 +122,9 @@ function GoalCard({ goal, onEdit, onDelete }: { goal: Goal; onEdit?: () => void;
   return (
     <article className="rounded-[22px] bg-card p-5 ring-1 ring-border lg:p-6">
       <h2 dir="auto" className="text-xl leading-snug font-semibold tracking-tight text-balance">
-        {goal.title}
+        <Link href={`/goals/${goal.id}`} className="rounded-[6px] outline-none hover:text-primary hover:underline focus-visible:ring-3 focus-visible:ring-ring/50">
+          {goal.title}
+        </Link>
       </h2>
       <p dir="auto" className="mt-2 line-clamp-3 text-muted-foreground">
         {goal.whyItMatters}

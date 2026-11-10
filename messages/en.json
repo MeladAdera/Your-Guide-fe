@@ -407,9 +407,65 @@
         "eyebrow": "Your first goal",
         "why": "Why it matters",
         "next": "Next: break it into steps small enough for one sitting.",
-        "home": "Go to Home"
+        "home": "Go to Home",
+        "tasks": "Break it into tasks"
       },
       "back": "Back"
+    },
+    "detail": {
+      "eyebrow": "Goal",
+      "back": "Goals",
+      "edit": "Edit goal",
+      "archivedNotice": "This goal is archived. Everything is kept, and it is read-only.",
+      "unarchive": "Unarchive"
+    }
+  },
+  "tasks": {
+    "title": "Tasks",
+    "doneOf": "{done} of {total} done",
+    "status": {
+      "todo": "To do",
+      "in_progress": "In progress",
+      "done": "Done"
+    },
+    "stepsOf": "{done} of {total} steps",
+    "noSteps": "No steps yet",
+    "empty": "Start with one task: a part of this goal you can name.",
+    "addTask": "Add a task",
+    "addStep": "Add a step",
+    "addStepLabel": "Add a step to “{task}”",
+    "add": "Add",
+    "menu": "More for “{title}”",
+    "rename": "Rename",
+    "renameLabel": "New name for “{title}”",
+    "delete": "Delete",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "save": "Save",
+    "stepDone": "Step done.",
+    "stepUndone": "Step marked not done.",
+    "taskDone": "Task done.",
+    "toast": {
+      "taskDeleted": "Task deleted.",
+      "stepDeleted": "Step deleted."
+    },
+    "deleteTask": {
+      "title": "Delete this task?",
+      "body": "“{title}” and its steps will be gone for good.",
+      "confirm": "Delete"
+    },
+    "breakdown": {
+      "button": "Break into steps",
+      "title": "Small steps for “{task}”",
+      "loading": "Finding small steps…",
+      "wait": "This can take up to 45 seconds.",
+      "intro": "Keep the ones that fit, change any of them.",
+      "add": "{count, plural, =0 {Add steps} one {Add # step} other {Add # steps}}",
+      "retry": "Try again",
+      "limit": "Today's suggestions are used up. They come back tomorrow.",
+      "partial": "{added} of {total} added. Press again to add the rest.",
+      "keep": "Keep step {n}",
+      "field": "Step {n}"
     }
   }
 }
