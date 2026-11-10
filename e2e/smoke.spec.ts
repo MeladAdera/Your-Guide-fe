@@ -63,6 +63,14 @@ test.describe("foundation", () => {
     await page.locator("#signup-email").fill(email);
     await page.locator("#signup-password").fill("correct horse battery");
     await page.getByRole("button", { name: "Create account" }).click();
+    // The API allows 5 sign-ups a minute per IP; in a full run the form may show its pause.
+    // Then the button counts down and comes back as "Create account": press it again.
+    test.setTimeout(150_000);
+    const outcome = await Promise.race([
+      page.waitForURL(/\/onboarding\/basics/, { timeout: 15_000 }).then(() => "landed"),
+      page.getByText("Let's take a short pause.").waitFor({ timeout: 15_000 }).then(() => "paused"),
+    ]);
+    if (outcome === "paused") await page.getByRole("button", { name: "Create account" }).click({ timeout: 75_000 });
     // Two server hops (/ then onboarding); the dev server may compile both on first visit.
     await expect(page).toHaveURL(/\/onboarding\/basics/, { timeout: 15_000 });
 

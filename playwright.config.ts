@@ -8,6 +8,8 @@ export default defineConfig({
   fullyParallel: false,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? "github" : "list",
+  // The dev server compiles a page on its first visit; under a full run 5s is sometimes too short.
+  expect: { timeout: 10_000 },
   use: {
     baseURL,
     trace: "retain-on-failure",

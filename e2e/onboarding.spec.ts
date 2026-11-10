@@ -1,14 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-
-const API_URL = process.env.API_URL ?? "http://localhost:3001";
-
-async function apiIsUp(): Promise<boolean> {
-  try {
-    return (await fetch(`${API_URL}/api/health`)).ok;
-  } catch {
-    return false;
-  }
-}
+import { API_URL, apiIsUp, signUp } from "./helpers";
 
 /** Server hops and first-visit compiles in dev can take a moment. */
 const NAV = { timeout: 15_000 };
@@ -20,13 +11,10 @@ async function save(page: Page, url: RegExp, name = "Save and continue") {
 
 test("onboarding: all seven screens to the first goal, with a draft and a return mid-way (needs the API)", async ({ page }) => {
   test.skip(!(await apiIsUp()), `API not reachable at ${API_URL}`);
-  test.setTimeout(120_000);
-  await page.context().clearCookies();
-
-  await page.goto("/sign-up");
-  await page.locator("#signup-email").fill(`e2e-onb-${Date.now()}@example.com`);
-  await page.locator("#signup-password").fill("correct horse battery");
-  await page.getByRole("button", { name: "Create account" }).click();
+  test.setTimeout(180_000);
+  // The sign-up form itself is covered by smoke.spec.ts; here the account comes from the API.
+  await signUp(page, "e2e-onb");
+  await page.goto("/");
   await expect(page).toHaveURL(/\/onboarding\/basics$/, NAV);
 
   // 1 · Basics can be skipped.
@@ -83,12 +71,8 @@ test("onboarding: all seven screens to the first goal, with a draft and a return
 
 test("onboarding: a value note that is too long is shown under that note", async ({ page }) => {
   test.skip(!(await apiIsUp()), `API not reachable at ${API_URL}`);
-  await page.context().clearCookies();
-  await page.goto("/sign-up");
-  await page.locator("#signup-email").fill(`e2e-onb-err-${Date.now()}@example.com`);
-  await page.locator("#signup-password").fill("correct horse battery");
-  await page.getByRole("button", { name: "Create account" }).click();
-  await expect(page).toHaveURL(/\/onboarding\/basics$/, NAV);
+  test.setTimeout(180_000);
+  await signUp(page, "e2e-onb-err");
 
   // The API's answer for a note past 300 characters, as docs/handoff.md shows it.
   await page.route("**/api/profile/sections/values", (route) =>
