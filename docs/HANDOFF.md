@@ -18,6 +18,7 @@ You are the senior frontend developer on **Your Guide**, a web app that helps pe
 5. **The approved sign-in design, which is the reference for every page:** on a laptop, a large rounded card on a sage ground holds both forms; an inset mint photo tile with a message glides between sign-in and sign-up. Phones: a hero with the picture, the form in a sheet. Code: `src/features/auth/components/auth-shell.tsx`.
 6. **The onboarding wizard (2026-11-10):** seven screens in the sign-in look (questions beside a mint "Why we ask" tile with a path to the first goal), optional questions tucked under "Add more", the check-in one statement at a time, values that rise into a list with a note each, drafts kept on the device, and a Playwright test of the whole path against the API.
 7. **The first goal and the goals list (2026-11-10, `docs/features/02-goals.md`):** the first goal beside the person's own words with the arrival moment after it; `/goals` with add, edit, archive, unarchive and delete.
+8. **The goal page (2026-11-10, `docs/features/03-goal-detail.md`):** `/goals/[id]` with tasks and steps (tick, rename, move, delete), and "Break into steps" with the model's suggestions kept, edited or dropped. Start session on a step comes with feature 5.
 
 **How I want you to work (rules):**
 - Every page uses the same colours, type and feeling as the sign-in screen (`docs/DESIGN.md`).
@@ -27,9 +28,9 @@ You are the senior frontend developer on **Your Guide**, a web app that helps pe
 - Ask me with clear options when a choice is mine.
 
 **Next steps:**
-1. Feature 3, goal detail with tasks and steps (`/goals/[id]`); then the first goal's arrival button becomes "Break it into tasks" and goal cards link to it.
-2. Then follow `docs/ROADMAP.md`: home, focus session, I'm struggling, progress, profile and polish, hardening and deploy (Vercel).
+1. Feature 4, Home; then feature 5, the focus session, which also adds Start session to each step on the goal page.
+2. Then follow `docs/ROADMAP.md`: focus session, I'm struggling, progress, profile and polish, hardening and deploy (Vercel).
 
-**Open items:** check onboarding and goals by hand in Arabic and dark mode; I review the Arabic questions; the dark-mode edge on the sign-in tile (postponed); review the Arabic wording of the week rhythm; confirm the licence of the journey picture (it looks like an Untitled UI demo image); test the phone keyboard behaviour on a real iPhone; "Forgot password", Google sign-in, "Remember me" and a full name wait for backend support; the landing page is paused until I have a direction.
+**Open items:** check onboarding, goals and the goal page by hand in Arabic and dark mode; I review the Arabic questions; the dark-mode edge on the sign-in tile (postponed); review the Arabic wording of the week rhythm; confirm the licence of the journey picture (it looks like an Untitled UI demo image); test the phone keyboard behaviour on a real iPhone; "Forgot password", Google sign-in, "Remember me" and a full name wait for backend support; the landing page is paused until I have a direction.
 
 Start by reading the files above, then tell me in a few lines where we are and ask which next step to take.

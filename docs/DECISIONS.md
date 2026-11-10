@@ -23,6 +23,16 @@ Dated, so a later reader knows when and why. The backend's own decisions live in
 - In the browser, any 401 from any route dispatches a window event; a listener sends the person to `/sign-in?next=<path>&reason=expired`.
 - `/` is the start-up router from handoff §7: me → onboarding → goals → active session → home.
 
+## 2026-11-10 · Build every page now, review later; app-wide pieces from features 1–3
+
+- **Working method changed by the owner:** every remaining page is built and committed in the sign-in look without a design round; the owner reviews and adjusts each page afterwards. Each feature doc ends with "Design choices made without the owner" for that review. (Until then: ideas → owner's pick → design options → owner's pick → build, and no visual commit before the owner had seen it.)
+- **Drafts of typed answers live on the device** (`src/lib/drafts.ts`, `src/lib/use-draft.ts`, keys `yg:draft:<screen>`), restored only into fields the server left empty and dropped on save. Not taken: autosave to the API, because each `PUT` replaces a whole screen.
+- **A field error with no place on the screen also shows the form alert** (`src/lib/api/field-errors.ts`), so Save never seems to do nothing.
+- **The AI's daily limit is remembered per device and per day** (`src/lib/ai-limit.ts`, `yg:ai-limit`, the account's own date): after `ai.daily_limit` every AI button rests until the person's next day. The API stays the judge; this only spares a refused call.
+- **Optimistic updates only where a wait would be felt:** the step checkbox and moving a step. Adds, deletes and archiving wait for the API; a wrong guess there would be more confusing than a short wait.
+- **Dates in the account's time zone** (`timeZone: user.timezone`) whenever a date is formatted, so the server render and the browser agree.
+- **End-to-end tests create accounts through the API** (`e2e/helpers.ts`), filling onboarding when a test starts later in the arc, and wait out the API's 5 sign-ups a minute per IP. A full run takes about five minutes.
+
 ## 2026-10-28 · The app frame and the week rhythm
 
 - **Frame: the sign-in row above one card.** Of three drawn frames (the sign-in row, a side rail, the card with a permanent mint tile) the owner chose the row: signing in then feels like entering the same place. Not taken: the side rail, more room for sections but less like the sign-in screen.
