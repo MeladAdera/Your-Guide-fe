@@ -30,7 +30,12 @@ export function BasicsForm({
 }) {
   const t = useTranslations("onboarding");
   const form = useForm<BasicsValues>({ resolver: zodResolver(basicsSchema), defaultValues: basicsDefaults(saved) });
-  const { save, saving, formError } = useSectionSave<BasicsSection, BasicsValues>({ slug: "basics", next, setError: form.setError });
+  // No draft here: chips and one short line are quick to redo. Only these two fields show an error.
+  const { save, saving, formError } = useSectionSave<BasicsSection, BasicsValues>({
+    slug: "basics",
+    next,
+    fieldErrors: { form, shows: (f) => f === "employmentStatus" || f === "occupation" },
+  });
   const { errors } = form.formState;
 
   const tb = useTranslations("onboarding.basics");
@@ -75,7 +80,7 @@ export function BasicsForm({
         )}
       />
 
-      <MoreQuestions count={3} defaultOpen={hasMore}>
+      <MoreQuestions count={3} reveal={hasMore}>
         <Controller
           control={form.control}
           name="educationLevel"

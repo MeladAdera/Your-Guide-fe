@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { LIFE_VALUES, type ValuesSection } from "@/lib/api/types";
+import { LIFE_VALUES, type LifeValue, type ValuesSection } from "@/lib/api/types";
 import type { TextQuestion } from "./text-screens";
 
 export const MIN_VALUES = 2;
@@ -25,13 +25,28 @@ export const valuesSchema = z.object({
 });
 export type ValuesValues = z.input<typeof valuesSchema>;
 
-/** Form values from what the API returned, in the order they were picked, or an empty form. */
-export function valuesDefaults(saved: Partial<ValuesSection> | null): ValuesValues {
+const text = (v: unknown) => (typeof v === "string" ? v : "");
+const isLifeValue = (v: unknown): v is LifeValue => (LIFE_VALUES as readonly unknown[]).includes(v);
+
+/**
+ * Form values from what the API returned (or a draft filled in over it), in
+ * the order they were picked, or an empty form. A draft comes from browser
+ * storage, so anything that is not a known value, a repeat, or past five is
+ * dropped.
+ */
+export function valuesDefaults(saved: Partial<ValuesSection> | Record<string, unknown> | null): ValuesValues {
+  const picks: ValuesValues["values"] = [];
+  for (const p of Array.isArray(saved?.values) ? (saved.values as unknown[]) : []) {
+    const pick = p as { value?: unknown; note?: unknown } | null;
+    if (pick && isLifeValue(pick.value) && !picks.some((q) => q.value === pick.value) && picks.length < MAX_VALUES) {
+      picks.push({ value: pick.value, note: text(pick.note) });
+    }
+  }
   return {
-    values: (saved?.values ?? []).map((p) => ({ value: p.value, note: p.note ?? "" })),
-    personToBecome: saved?.personToBecome ?? "",
-    wouldRegretNotDoing: saved?.wouldRegretNotDoing ?? "",
-    rememberedFor: saved?.rememberedFor ?? "",
+    values: picks,
+    personToBecome: text(saved?.personToBecome),
+    wouldRegretNotDoing: text(saved?.wouldRegretNotDoing),
+    rememberedFor: text(saved?.rememberedFor),
   };
 }
 

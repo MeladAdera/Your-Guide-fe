@@ -7,12 +7,14 @@ import { cn } from "@/lib/utils";
 
 /**
  * The optional questions of a screen, tucked under "Add more, if you like" so
- * every screen looks short. Opens by itself when one of them already has an
- * answer (a returning person), and stays open once opened.
+ * every screen looks short. Opens by itself when one of them has an answer
+ * (saved, or restored from a draft) or an error, and stays open once opened.
  */
-export function MoreQuestions({ count, defaultOpen, children }: { count: number; defaultOpen?: boolean; children: ReactNode }) {
+export function MoreQuestions({ count, reveal, children }: { count: number; reveal?: boolean; children: ReactNode }) {
   const t = useTranslations("onboarding");
-  const [open, setOpen] = useState(Boolean(defaultOpen));
+  const [open, setOpen] = useState(Boolean(reveal));
+  // Opened during render, so a field with an error is visible in the same frame and can take focus.
+  if (reveal && !open) setOpen(true);
   const panel = useId();
   return (
     <div className={cn("rounded-[18px] ring-1 ring-border", open && "ring-0")}>

@@ -7,7 +7,9 @@ import { Field } from "@/components/shared/field";
 import { FormError } from "@/components/shared/form-error";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { TEXT_SCREENS, textDefaults, textPayload, textSchema, type TextQuestion, type TextScreen, type TextValues } from "../text-screens";
+import { fillFromDraft } from "../drafts";
+import { hasText, TEXT_SCREENS, textDefaults, textPayload, textSchema, type TextQuestion, type TextScreen, type TextValues } from "../text-screens";
+import { useDraft } from "../use-draft";
 import { useSectionSave } from "../use-section-save";
 import { MoreQuestions } from "./more-questions";
 import { PrimaryAction, WizardFooter } from "./wizard-footer";
@@ -33,12 +35,19 @@ export function TextScreenForm({
 }) {
   const t = useTranslations("onboarding");
   const form = useForm<TextValues>({ resolver: zodResolver(textSchema(screen)), defaultValues: textDefaults(screen, saved) });
-  const { save, saving, formError } = useSectionSave<Record<string, string | null>, TextValues>({ slug, next, setError: form.setError });
-
+  const { restored, discard } = useDraft(screen, form, (draft) => textDefaults(screen, fillFromDraft(saved, draft)));
   const questions = TEXT_SCREENS[screen];
+  const { save, saving, formError } = useSectionSave<Record<string, string | null>, TextValues>({
+    slug,
+    next,
+    fieldErrors: { form, shows: (f) => questions.some((q) => q.name === f) },
+    onSaved: discard,
+  });
+
   const required = questions.filter((q) => q.required);
   const optional = questions.filter((q) => !q.required);
-  const hasOptionalAnswer = optional.some((q) => typeof saved?.[q.name] === "string" && saved[q.name]);
+  const { errors } = form.formState;
+  const revealOptional = optional.some((q) => hasText(saved?.[q.name]) || hasText(restored?.[q.name]) || errors[q.name]);
 
   return (
     <form
@@ -56,7 +65,7 @@ export function TextScreenForm({
         <TextQuestionField key={q.name} question={q} id={`${slug}-${q.name}`} form={form} withStarter />
       ))}
       {optional.length > 0 && (
-        <MoreQuestions count={optional.length} defaultOpen={hasOptionalAnswer}>
+        <MoreQuestions count={optional.length} reveal={revealOptional}>
           {optional.map((q) => (
             <TextQuestionField key={q.name} question={q} id={`${slug}-${q.name}`} form={form} />
           ))}

@@ -9,7 +9,9 @@ import { Input } from "@/components/ui/input";
 import { validationMessageKey } from "@/lib/api/errors";
 import { LIFE_VALUES, type ValuesSection } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
-import type { TextValues } from "../text-screens";
+import { fillFromDraft } from "../drafts";
+import { hasText, type TextValues } from "../text-screens";
+import { useDraft } from "../use-draft";
 import { useSectionSave } from "../use-section-save";
 import { MAX_VALUES, VALUES_QUESTIONS, valuesDefaults, valuesPayload, valuesSchema, type ValuesValues } from "../values";
 import { MoreQuestions } from "./more-questions";
@@ -22,18 +24,25 @@ import { PrimaryAction, WizardFooter } from "./wizard-footer";
  * it back. Two to five, a set, not a ranking. Then the person to become, and
  * two optional questions under "Add more". Saving leads to the first goal.
  */
-export function ValuesForm({ saved, back, next }: { saved: Partial<ValuesSection> | null; back: string; next: string }) {
+export function ValuesForm({ saved, back, next }: { saved: Record<string, unknown> | null; back: string; next: string }) {
   const t = useTranslations("onboarding");
   const tv = useTranslations("onboarding.values");
   const form = useForm<ValuesValues>({ resolver: zodResolver(valuesSchema), defaultValues: valuesDefaults(saved) });
   const picks = useFieldArray({ control: form.control, name: "values" });
-  const { save, saving, formError } = useSectionSave<ValuesSection, ValuesValues>({ slug: "values", next, setError: form.setError });
+  const { restored, discard } = useDraft("values", form, (draft) => valuesDefaults(fillFromDraft(saved, draft)));
+  const { save, saving, formError } = useSectionSave<ValuesSection, ValuesValues>({
+    slug: "values",
+    next,
+    fieldErrors: { form, shows: (f) => f === "values" || /^values\.\d+\.note$/.test(f) || VALUES_QUESTIONS.some((q) => q.name === f) },
+    onSaved: discard,
+  });
 
   const chosen = picks.fields.map((f) => f.value);
   const full = chosen.length >= MAX_VALUES;
-  const listError = form.formState.errors.values?.root?.message ?? form.formState.errors.values?.message;
+  const { errors } = form.formState;
+  const listError = errors.values?.root?.message ?? errors.values?.message;
   const [personToBecome, ...optional] = VALUES_QUESTIONS;
-  const hasOptionalAnswer = Boolean(saved?.wouldRegretNotDoing || saved?.rememberedFor);
+  const revealOptional = optional.some((q) => hasText(saved?.[q.name]) || hasText(restored?.[q.name]) || errors[q.name as keyof ValuesValues]);
   // The question fields are shared with the text screens and only touch top-level text fields.
   const textForm = form as unknown as UseFormReturn<TextValues>;
 
@@ -124,7 +133,7 @@ export function ValuesForm({ saved, back, next }: { saved: Partial<ValuesSection
       </fieldset>
 
       <TextQuestionField question={personToBecome} id="values-personToBecome" form={textForm} withStarter />
-      <MoreQuestions count={optional.length} defaultOpen={hasOptionalAnswer}>
+      <MoreQuestions count={optional.length} reveal={revealOptional}>
         {optional.map((q) => (
           <TextQuestionField key={q.name} question={q} id={`values-${q.name}`} form={textForm} />
         ))}

@@ -22,6 +22,9 @@ export const TEXT_SCREENS: Record<TextScreen, TextQuestion[]> = {
 
 export type TextValues = Record<string, string>;
 
+/** True for a string with something written in it. */
+export const hasText = (v: unknown): v is string => typeof v === "string" && v.trim() !== "";
+
 /** Rule codes from the `validation` namespace; limits mirror the API. */
 export function textSchema(screen: TextScreen) {
   return z.object(

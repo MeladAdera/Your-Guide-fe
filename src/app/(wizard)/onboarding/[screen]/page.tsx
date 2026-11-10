@@ -10,7 +10,7 @@ import { WizardFrame } from "@/features/onboarding/components/wizard-frame";
 import { countryOptions } from "@/features/onboarding/countries";
 import { nextHref, prevHref, savedFlags, screenOf, stepOf } from "@/features/onboarding/screens";
 import { serverApi, serverApiOrNull } from "@/lib/api/server";
-import type { BasicsSection, OnboardingStatus, ValuesSection } from "@/lib/api/types";
+import type { BasicsSection, OnboardingStatus } from "@/lib/api/types";
 
 export async function generateMetadata({ params }: PageProps<"/onboarding/[screen]">): Promise<Metadata> {
   const { screen } = await params;
@@ -51,7 +51,7 @@ export default async function OnboardingScreenPage({ params }: PageProps<"/onboa
       ) : screen === "confidence" ? (
         <ConfidenceForm saved={saved as Record<string, unknown> | null} back={back} next={next} />
       ) : screen === "values" ? (
-        <ValuesForm saved={saved as Partial<ValuesSection> | null} back={back} next={next} />
+        <ValuesForm saved={saved as Record<string, unknown> | null} back={back} next={next} />
       ) : (
         <TextScreenForm screen={screen} slug={slug} saved={saved as Record<string, unknown> | null} back={back} next={next} />
       )}

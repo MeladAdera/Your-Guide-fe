@@ -3,24 +3,29 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { FieldValues, Path, UseFormSetError } from "react-hook-form";
+import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { isApiError } from "@/lib/api/errors";
 import { onboardingApi } from "./api";
+import { placeFieldErrors } from "./field-errors";
 
 /**
  * Saving one onboarding screen: PUT the whole screen, then go to the next one.
- * Field errors from the API land under the field they name (the first one gets
- * focus); anything else, or any error on a screen without fields to point at,
- * becomes one form-level error, with the answers kept.
+ * Field errors from the API land under the fields the screen shows (the first
+ * one gets focus). Anything else, including a field error with no place on
+ * the screen, also becomes one form-level error, with the answers kept.
  */
 export function useSectionSave<TBody, TForm extends FieldValues>({
   slug,
   next,
-  setError,
+  fieldErrors,
+  onSaved,
 }: {
   slug: string;
   next: string;
-  setError?: UseFormSetError<TForm>;
+  /** Where API field errors can go; screens without fields leave it out. */
+  fieldErrors?: { form: Pick<UseFormReturn<TForm>, "setError" | "setFocus">; shows: (field: string) => boolean };
+  /** Runs before leaving the screen, e.g. to drop the draft. */
+  onSaved?: () => void;
 }) {
   const router = useRouter();
   const [formError, setFormError] = useState<unknown>(null);
@@ -28,12 +33,18 @@ export function useSectionSave<TBody, TForm extends FieldValues>({
   const mutation = useMutation({
     mutationFn: (body: TBody) => onboardingApi.saveSection(slug, body),
     onMutate: () => setFormError(null),
-    onSuccess: () => router.push(next),
+    onSuccess: () => {
+      onSaved?.();
+      router.push(next);
+    },
     onError: (e) => {
-      if (setError && isApiError(e) && e.code === "validation.failed") {
-        const fields = Object.entries(e.fieldErrors());
-        fields.forEach(([field, rule], i) => setError(field as Path<TForm>, { type: "server", message: rule }, { shouldFocus: i === 0 }));
-        if (fields.length) return;
+      if (fieldErrors && isApiError(e) && e.code === "validation.failed") {
+        const { form } = fieldErrors;
+        const { placed, allPlaced } = placeFieldErrors(e.fieldErrors(), fieldErrors.shows);
+        placed.forEach(([field, rule]) => form.setError(field as Path<TForm>, { type: "server", message: rule }));
+        // A frame later, so a field inside "Add more" has been revealed and can take focus.
+        if (placed.length) requestAnimationFrame(() => form.setFocus(placed[0][0] as Path<TForm>));
+        if (allPlaced) return;
       }
       setFormError(e);
     },
