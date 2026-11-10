@@ -16,6 +16,8 @@ Done (foundation, 9 commits on `main`):
 
 Sign-in pages done (feature 0, `docs/features/00-auth.md`), checked against the local API on 2026-10-27. The app frame and Home's week rhythm tile done on 2026-10-28 (`DESIGN.md` §9). The landing page is paused until the owner has a direction.
 
+Onboarding wizard built (feature 1, `docs/features/01-onboarding.md`) on 2026-11-10: all seven screens, drafts on the device, the Playwright path passing against the local API. Left before it counts as done: the by-hand check in Arabic and dark mode, and the owner's review of the Arabic questions. Next: feature 2, the first goal.
+
 ## The loop for every feature
 
 1. **Page spec (before code).** I write `docs/features/NN-name.md` from the template: the page's job, what is on it, the layout at phone and laptop width, every state (empty, loading, error, success), the API calls and which error codes the page handles, and the decisions to settle. You read it, we adjust, you say go.
@@ -66,10 +68,10 @@ Size: S is a session, M is two or three, L is four or more.
 
 **API.** `GET /api/profile/onboarding` to find where to start and which screens are done. `GET /api/profile/sections/<screen>` to prefill (404 `profile.screen_not_saved` means empty). `PUT /api/profile/sections/<screen>` with every field of the screen. Field errors from `validation.failed` land under the right input.
 
-**Decisions to settle.**
-- Keep an unsaved draft of the current screen in `localStorage` so a closed tab does not lose a long answer? (Proposal: yes, per screen, cleared on save.)
-- Can the person jump between screens from a step indicator, or only Back/Next? (Proposal: Back/Next only during the first pass; free jumping later from the profile page.)
-- How the "why we ask" line is worded per screen in both languages. You review the Arabic.
+**Decisions settled** (details in `docs/features/01-onboarding.md` §6, which supersedes the screen notes above where they differ, for example the check-in is one statement at a time and the laptop has the mint "Why we ask" tile).
+- Unsaved drafts: yes, per typed screen, cleared on save.
+- Back/Next only during the first pass; free jumping later from the profile page.
+- The "why we ask" lines are written in both languages; the Arabic waits for your review.
 
 ### 2 · First goal and goals list
 

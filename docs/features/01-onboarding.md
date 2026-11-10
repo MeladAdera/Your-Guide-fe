@@ -1,6 +1,6 @@
 # 01 · Onboarding wizard
 
-Status: **spec** (2026-10-22, design approved 2026-10-28) · building · verified · done
+Status: spec (2026-10-22, design approved 2026-10-28) · **built 2026-11-10** · the Playwright path passes against the local API on phone and laptop · still to do by hand: Arabic and RTL, dark mode, and the owner's review of the Arabic questions (§10)
 
 ## 1. Job
 
@@ -126,9 +126,9 @@ Data flow: the screen page is a Server Component that fetches the section and th
 
 Payload rules from the handoff: PUT replaces the whole screen, so every field is sent, optional empties as `null`; text is trimmed in the form before sending; never send `updatedAt` or unknown fields.
 
-## 6. Decisions (proposed, to confirm before building)
+## 6. Decisions
 
-1. **Unsaved draft per screen in `localStorage`.** Typing is saved under `yg:draft:<screen>` (debounced), restored only into fields the server returned empty, cleared on a successful save. Reason: a long answer lost to a closed tab is the one thing that makes people abandon a wizard. Alternative not taken: autosave to the API on change, because PUT replaces the whole screen and would write half-answers.
+1. **Unsaved draft per screen in `localStorage`, on the typed screens (2–5 and 7).** Typing is saved under `yg:draft:<screen>` 400ms after the last key (and when the tab closes), restored only into fields the server returned empty, and dropped on a successful save. A saved answer always wins over a draft, because it is what the person last chose to keep. The restore runs just after the page appears, since the server cannot see the draft and both renders must match. A restored optional answer opens "Add more". Basics and the check-in keep no draft: chips and taps take seconds to redo. Code: `drafts.ts`, `use-draft.ts`. Reason: a long answer lost to a closed tab is the one thing that makes people abandon a wizard. Alternative not taken: autosave to the API on change, because PUT replaces the whole screen and would write half-answers.
 2. **Back and Next only on the first pass.** The progress line is not clickable. Reason: the order is the product (values before plans). Jumping between answers comes with the profile page (feature 8), which reuses these screens in an "edit" mode.
 3. **Server-side prefill, client-side save.** Reason: no spinner on screen open and no client cache to keep consistent; the URL is the state.
 4. **Native select for the country**, names from `Intl.DisplayNames`. Reason: no country list to translate, works well on phones, fully accessible. Alternative not taken: a searchable combobox, more code for a field that is optional.
@@ -137,21 +137,25 @@ Payload rules from the handoff: PUT replaces the whole screen, so every field is
 7. **Validation mirrors the API limits in zod** (lengths, 2–5 values, each once) so server validation is the safety net.
 8. **Keyboard**: Ctrl/Cmd+Enter saves from inside a text area; Enter alone inserts a line.
 9. **Arabic wording convention**: questions and why lines are phrased with nominal or neutral forms where the language allows, never a gendered imperative. You review every Arabic question before it ships.
+10. **A server field error with no place on the screen also shows the form alert** ("Some fields need attention."). Each screen says which fields can show an error; the rest (for example the age chips, or a field the API does not know) would otherwise be set on nothing, and Save would seem to do nothing. Errors inside "Add more" open it, and the first error takes focus. Code: `field-errors.ts`, `use-section-save.ts`.
+11. **Anything read back from a draft is checked like outside input.** Values that are unknown, repeated or past five are dropped, and non-text answers become empty, since browser storage can hold anything.
 
 ## 7. Tests
 
-- Unit: the zod schemas (limits, required, values 2–5 and unique), the next/previous screen helpers, the server field path mapping (`values.0.note`), the draft helper (restore only into empty fields, clear on save).
-- Playwright (needs the API): register → skip basics → fill situation → achievements → patterns → self-view → confidence → values → lands on `/onboarding/goal`; reload mid-way lands on the same screen with the saved text; `/` after that returns to the first missing screen.
-- By hand: both languages, RTL layout of chips and the confidence rows, phone and laptop widths, dark mode.
+- Unit (beside the code in `src/features/onboarding/`): the zod schemas and payloads of every screen (limits, required, values 2–5 and unique, empties as `null`), the next/previous screen helpers, the check-in answers, the server field path mapping (`values.0.note`, unknown fields ask for the alert), the drafts (restore only into empty fields, a saved answer wins, broken storage ignored, unknown values dropped).
+- Playwright, `e2e/onboarding.spec.ts` (needs the API; skipped when it is down), on phone and laptop: register → skip basics → situation → Back shows the saved text → achievements, where a typed answer survives a reload and `/` returns to this first missing screen → patterns → self-view → the eight check-in statements by tap → two values with a note → lands on `/onboarding/goal`, and `/` leads there too. A second test answers a values save with the API's `values.1.note` error and checks it lands under that note, with focus.
+- By hand, still to do: both languages, RTL layout of chips and the check-in, dark mode.
 
 ## 8. Build steps (one commit each)
 
-1. Wizard shell: layout, progress line, footer, screen order helpers, the `[screen]` route wired to real pages.
-2. Screen 1 Basics: chips, select, occupation; save and skip.
-3. Screens 2–5: the shared text screen with the four definitions.
-4. Screen 6: the check-in.
-5. Screen 7: values with notes and the three questions.
-6. Drafts, field-error mapping, unit tests, Playwright path, this doc completed.
+All done and on `main`:
+
+1. Wizard shell: layout, progress line, footer, screen order helpers, the `[screen]` route wired to real pages (6068e49).
+2. Screen 1 Basics: chips, select, occupation; save and skip (0df1985).
+3. Screens 2–5: the shared text screen with the four definitions (29abf1d).
+4. Screen 6: the check-in (1353d1a).
+5. Screen 7: values with notes and the three questions (02e7f3f).
+6. Drafts and field errors (6aeb94a), the Playwright path (c7bb493), this doc completed.
 
 ## 9. Copy to add (`messages/*.json`, `onboarding` namespace)
 
@@ -183,4 +187,6 @@ The questions themselves, the chip labels for the fixed lists, and the scale lab
 ## 10. Open questions and follow-ups
 
 - None for the backend. `GET /api/profile/onboarding` already reports `basics` separately, which is what the skip needs.
+- **For the owner:** review the Arabic of every question, starter phrase, value name and why line (`messages/ar.json`, `onboarding` namespace), as decision 9 says.
+- `/onboarding/goal` is a named placeholder until feature 2 builds the first goal there.
 - Follow-up for feature 8: the same screen components in an "edit" mode on `/settings/profile`, with free navigation between screens.
