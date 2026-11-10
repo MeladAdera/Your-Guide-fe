@@ -1,6 +1,6 @@
 # 02 · First goal and goals list
 
-Status: spec 2026-11-10 · built without a design round, on the owner's word ("build as you see fit; I will come back to each page") · **owner's design review pending** (§8)
+Status: **built 2026-11-10** (8130d74, eef5af6, f2d5496) without a design round, on the owner's word ("build as you see fit; I will come back to each page") · the Playwright paths pass against the local API on phone and laptop · **owner's design review pending** (§8) · still to do by hand: Arabic and dark mode
 
 ## 1. Job
 
@@ -78,11 +78,13 @@ Lists are TanStack queries `["goals", "active"]` and `["goals", "archived"]`, fi
 
 ## 7. Tests
 
-- Unit: the goal schema and payload (required, limits, empties as `null`, trimming), the why starter from the chosen values.
-- Playwright (needs the API): an account with onboarding filled through the API writes its first goal, sees the arrival, goes Home, and `/` then lands on Home; on `/goals` a second goal is added, edited, archived, unarchived and deleted.
+- Unit, `goal-form.test.ts`: the goal schema and payload (required, limits, empties as `null`, trimming), filling the form from a goal.
+- Playwright, `e2e/goals.spec.ts` (needs the API), on phone and laptop: an account with onboarding filled through the API (`e2e/helpers.ts`) writes its first goal, a value chip shapes the why's starter, the arrival shows the goal with focus on it, Home, then `/` lands on Home and `/onboarding/goal` sends to `/goals`; on `/goals` a goal is added, edited (an optional answer added), archived, found read-only under Archived, unarchived and deleted; and a delete answered with `goal.has_work_history` (played, since work history needs a focus session) turns into the archive offer.
+- The API allows 5 sign-ups a minute per IP; the test helper waits the minute out, so a full run takes about three minutes.
 
 ## 8. Design choices made without the owner (for the review)
 
 - First goal: the wizard card with "their own words" and the live goal at the flag in the tile; value chips as an anchor; the if–then starter; first sign under "Add more".
 - Arrival: in-place change, journey picture in the tile, no hold-to-commit (a normal button; hold-to-commit can be added at review).
-- Goals list: single column of cards, tabs, text-button actions, dialogs for new/edit/delete, toasts.
+- Goals list: single column of cards (720px), tabs with counts, text-button actions, dialogs for new/edit/delete, toasts; the dialog shows all four questions at once, with starters only for a new goal.
+- Phone arrival: the journey picture as a strip above the goal, cropped to keep the flag in view.

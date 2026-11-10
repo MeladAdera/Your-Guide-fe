@@ -16,7 +16,7 @@ Done (foundation, 9 commits on `main`):
 
 Sign-in pages done (feature 0, `docs/features/00-auth.md`), checked against the local API on 2026-10-27. The app frame and Home's week rhythm tile done on 2026-10-28 (`DESIGN.md` §9). The landing page is paused until the owner has a direction.
 
-Onboarding wizard built (feature 1, `docs/features/01-onboarding.md`) on 2026-11-10: all seven screens, drafts on the device, the Playwright path passing against the local API. Left before it counts as done: the by-hand check in Arabic and dark mode, and the owner's review of the Arabic questions. Next: feature 2, the first goal.
+Onboarding wizard built (feature 1, `docs/features/01-onboarding.md`) on 2026-11-10: all seven screens, drafts on the device, the Playwright path passing against the local API. Left before it counts as done: the by-hand check in Arabic and dark mode, and the owner's review of the Arabic questions. Feature 2 (first goal and goals list, `docs/features/02-goals.md`) built on 2026-11-10 without a design round, on the owner's word: build every page now, review each later. Next: feature 3, goal detail with tasks and steps.
 
 ## The loop for every feature
 
