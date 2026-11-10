@@ -188,7 +188,6 @@
     "skipForNow": "التخطي الآن",
     "saveAndContinue": "حفظ ومتابعة",
     "saveAndWriteGoal": "حفظ وكتابة هدفي الأول",
-    "questionsNext": "أسئلة هذه الشاشة تأتي في خطوة البناء التالية.",
     "addMore": "إضافة المزيد، عند الرغبة",
     "optionalCount": "{count, plural, zero {لا أسئلة اختيارية} one {سؤال اختياري واحد} two {سؤالان اختياريان} few {# أسئلة اختيارية} many {# سؤالاً اختيارياً} other {# سؤال اختياري}}",
     "basics": {
@@ -248,14 +247,18 @@
       "whoIAm": "وصف صادق للنفس: من أنت في هذه المرحلة من الحياة؟",
       "goodAt": "ما نقاط القوة الطبيعية؟",
       "othersComeToMeFor": "لأيّ أمر يلجأ الآخرون إليك عادةً؟",
-      "stillFiguringOut": "ما الذي لا يزال غير واضح عن النفس؟"
+      "stillFiguringOut": "ما الذي لا يزال غير واضح عن النفس؟",
+      "personToBecome": "كيف يبدو الشخص المنشود في المستقبل؟",
+      "wouldRegretNotDoing": "ما الذي سيكون مؤسفاً عدم فعله؟",
+      "rememberedFor": "ما الذي يستحق أن يتذكّره الناس عنك؟"
     },
     "starters": {
       "typicalDay": "في معظم الأيام",
       "wantToChange": "أودّ أن يتغيّر",
       "proudOf": "مرّةً، استطعتُ أن",
       "oftenPostpone": "ما زلتُ أؤجّل",
-      "whoIAm": "الآن، أنا شخص"
+      "whoIAm": "الآن، أنا شخص",
+      "personToBecome": "أريد أن أصبح شخصاً"
     },
     "checkin": {
       "position": "العبارة {current} من {total}",
@@ -280,6 +283,28 @@
         "compareTooMuch": "أقارن نفسي بالآخرين أكثر من اللازم."
       },
       "previous": "العبارة السابقة"
+    },
+    "values": {
+      "label": "القيم المختارة",
+      "chosen": "{count} من {max}",
+      "empty": "القيم المختارة تظهر هنا.",
+      "hint": "اختيار من قيمتين إلى خمس.",
+      "full": "تم اختيار خمس. يمكن إزالة واحدة من الأعلى لاستبدالها.",
+      "notePlaceholder": "لماذا تهمّ هذه القيمة (اختياري)",
+      "noteLabel": "لماذا تهمّ قيمة {value}",
+      "remove": "إزالة {value}",
+      "names": {
+        "family": "العائلة",
+        "health": "الصحة",
+        "career": "المسيرة المهنية",
+        "learning": "التعلّم",
+        "contribution": "العطاء",
+        "financial_security": "الأمان المالي",
+        "creativity": "الإبداع",
+        "relationships": "العلاقات",
+        "spirituality": "الروحانية",
+        "independence": "الاستقلالية"
+      }
     }
   },
   "home": {

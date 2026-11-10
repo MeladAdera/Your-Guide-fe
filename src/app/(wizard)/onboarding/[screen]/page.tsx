@@ -5,13 +5,12 @@ import { PageHeader } from "@/components/shared/page-header";
 import { BasicsForm } from "@/features/onboarding/components/basics-form";
 import { ConfidenceForm } from "@/features/onboarding/components/confidence-form";
 import { TextScreenForm } from "@/features/onboarding/components/text-screen-form";
-import { PrimaryAction, WizardFooter } from "@/features/onboarding/components/wizard-footer";
+import { ValuesForm } from "@/features/onboarding/components/values-form";
 import { WizardFrame } from "@/features/onboarding/components/wizard-frame";
 import { countryOptions } from "@/features/onboarding/countries";
 import { nextHref, prevHref, savedFlags, screenOf, stepOf } from "@/features/onboarding/screens";
-import { isTextScreen } from "@/features/onboarding/text-screens";
 import { serverApi, serverApiOrNull } from "@/lib/api/server";
-import type { BasicsSection, OnboardingStatus } from "@/lib/api/types";
+import type { BasicsSection, OnboardingStatus, ValuesSection } from "@/lib/api/types";
 
 export async function generateMetadata({ params }: PageProps<"/onboarding/[screen]">): Promise<Metadata> {
   const { screen } = await params;
@@ -41,42 +40,21 @@ export default async function OnboardingScreenPage({ params }: PageProps<"/onboa
     // 404 profile.screen_not_saved means "start empty".
     serverApiOrNull<unknown>(`/api/profile/sections/${slug}`, ["profile.screen_not_saved"]),
   ]);
-  const back = prevHref(screen);
-  const isFirst = back === null;
-  const frame = { step: stepOf(screen), saved: savedFlags(status), title: t(`screens.${screen}`), why: t(`why.${screen}`) };
-
-  if (screen === "basics") {
-    return (
-      <WizardFrame {...frame}>
-        <BasicsForm saved={saved as BasicsSection | null} next={nextHref(screen)} countries={countryOptions(await getLocale())} />
-      </WizardFrame>
-    );
-  }
-
-  if (isTextScreen(screen) && back) {
-    return (
-      <WizardFrame {...frame}>
-        <TextScreenForm screen={screen} slug={slug} saved={saved as Record<string, unknown> | null} back={back} next={nextHref(screen)} />
-      </WizardFrame>
-    );
-  }
-
-  if (screen === "confidence" && back) {
-    return (
-      <WizardFrame {...frame}>
-        <ConfidenceForm saved={saved as Record<string, unknown> | null} back={back} next={nextHref(screen)} />
-      </WizardFrame>
-    );
-  }
+  const next = nextHref(screen);
+  // Only the first screen has no previous one, and it shows Skip for now instead of Back.
+  const back = prevHref(screen) ?? next;
 
   return (
-    <WizardFrame {...frame}>
-      {/* The questions of the last screen arrive in build step 5. */}
-      <p className="rounded-[18px] p-5 text-muted-foreground ring-1 ring-border">{t("questionsNext")}</p>
-      <WizardFooter
-        secondary={isFirst ? { href: nextHref(screen), label: t("skipForNow") } : { href: back, label: t("back") }}
-        primary={<PrimaryAction href={nextHref(screen)}>{screen === "values" ? t("saveAndWriteGoal") : t("saveAndContinue")}</PrimaryAction>}
-      />
+    <WizardFrame step={stepOf(screen)} saved={savedFlags(status)} title={t(`screens.${screen}`)} why={t(`why.${screen}`)}>
+      {screen === "basics" ? (
+        <BasicsForm saved={saved as BasicsSection | null} next={next} countries={countryOptions(await getLocale())} />
+      ) : screen === "confidence" ? (
+        <ConfidenceForm saved={saved as Record<string, unknown> | null} back={back} next={next} />
+      ) : screen === "values" ? (
+        <ValuesForm saved={saved as Partial<ValuesSection> | null} back={back} next={next} />
+      ) : (
+        <TextScreenForm screen={screen} slug={slug} saved={saved as Record<string, unknown> | null} back={back} next={next} />
+      )}
     </WizardFrame>
   );
 }

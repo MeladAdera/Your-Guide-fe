@@ -20,10 +20,6 @@ export const TEXT_SCREENS: Record<TextScreen, TextQuestion[]> = {
   selfView: [q("whoIAm", true, 3000), q("goodAt"), q("othersComeToMeFor"), q("stillFiguringOut")],
 };
 
-export function isTextScreen(screen: string): screen is TextScreen {
-  return screen in TEXT_SCREENS;
-}
-
 export type TextValues = Record<string, string>;
 
 /** Rule codes from the `validation` namespace; limits mirror the API. */

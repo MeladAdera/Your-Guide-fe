@@ -76,7 +76,8 @@ export function TextScreenForm({
   );
 }
 
-function TextQuestionField({
+/** One written question: label, growing text area, starter phrase when empty, count near the limit. Also used on the values screen. */
+export function TextQuestionField({
   question,
   id,
   form,
