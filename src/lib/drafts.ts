@@ -4,7 +4,8 @@ import { STORAGE_PREFIX } from "@/lib/device-data";
  * Unsaved answers, kept per screen on this device so a closed tab loses
  * nothing (docs/features/01-onboarding.md §6.1). Logging out removes them with
  * every other `yg:` key. Storage can be full or blocked; a draft is a
- * convenience, so every failure here is silent.
+ * convenience, so every failure here is silent. Used by onboarding and the
+ * goal form.
  */
 export type Draft = Record<string, unknown>;
 

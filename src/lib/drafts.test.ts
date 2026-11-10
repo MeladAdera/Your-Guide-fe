@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { clearDraft, draftKey, fillFromDraft, readDraft, writeDraft } from "./drafts";
-import { textDefaults } from "./text-screens";
-import { valuesDefaults } from "./values";
+import { textDefaults } from "@/features/onboarding/text-screens";
+import { valuesDefaults } from "@/features/onboarding/values";
 
 describe("drafts", () => {
   beforeEach(() => localStorage.clear());

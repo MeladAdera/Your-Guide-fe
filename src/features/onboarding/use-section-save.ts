@@ -6,7 +6,7 @@ import { useState } from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { isApiError } from "@/lib/api/errors";
 import { onboardingApi } from "./api";
-import { placeFieldErrors } from "./field-errors";
+import { placeFieldErrors } from "@/lib/api/field-errors";
 
 /**
  * Saving one onboarding screen: PUT the whole screen, then go to the next one.
