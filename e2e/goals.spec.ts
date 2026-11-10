@@ -33,6 +33,8 @@ test("first goal: values shape the why, the arrival shows the goal, then Home (n
   await expect(page.getByText("Because Family matters to me, my evenings come back.")).toBeVisible();
   expect(await page.evaluate(() => localStorage.getItem("yg:draft:goal"))).toBeNull();
 
+  // The next step is breaking the goal down; Home is the quiet second way.
+  await expect(page.getByRole("link", { name: "Break it into tasks" })).toHaveAttribute("href", /^\/goals\/[0-9a-f-]{36}$/);
   await page.getByRole("link", { name: "Go to Home" }).click();
   await expect(page).toHaveURL(/\/home$/, NAV);
   // With a goal, the start-up router sends the person Home, and the first-goal page sends them to their goals.
