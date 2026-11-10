@@ -335,5 +335,81 @@
     "emptyBody": "Every step you finish, and every time you keep going, shows up here.",
     "dayLabel": "{day}: {steps, plural, one {# step} other {# steps}}, {kept, plural, =0 {did not need to push through} one {kept going once} other {kept going # times}}",
     "today": "today"
+  },
+  "goals": {
+    "title": "Goals",
+    "intro": "What you're working toward, and why.",
+    "newGoal": "New goal",
+    "tabs": {
+      "active": "Active ({count})",
+      "archived": "Archived ({count})"
+    },
+    "questions": {
+      "title": "What would you like to change or accomplish?",
+      "whyItMatters": "Why does it matter to you?",
+      "obstacle": "What might get in the way?",
+      "firstOutcome": "What would be the first sign you are moving?"
+    },
+    "startWith": "Start with: “{phrase}…”",
+    "charCount": "{count} / {max}",
+    "starters": {
+      "why": "Because",
+      "whyValues": "Because {values} {count, plural, one {matters} other {matter}} to me,",
+      "obstacle": "If I start to put it off, then I will"
+    },
+    "earlier": "Earlier you wrote: “{text}”",
+    "card": {
+      "since": "Since {date}",
+      "ifHard": "If it gets hard",
+      "firstSign": "First sign",
+      "edit": "Edit",
+      "archive": "Archive",
+      "unarchive": "Unarchive",
+      "delete": "Delete",
+      "actions": "Actions for {title}"
+    },
+    "empty": {
+      "active": "No active goals. A goal gives every step a reason.",
+      "archived": "Archived goals appear here, with everything kept."
+    },
+    "dialog": {
+      "newTitle": "A new goal",
+      "editTitle": "Edit goal",
+      "save": "Save goal",
+      "deleteTitle": "Delete this goal?",
+      "deleteBody": "“{title}” and its tasks and steps will be gone for good.",
+      "deleteConfirm": "Delete",
+      "historyTitle": "Archive it instead?",
+      "historyBody": "This goal has work behind it, so it can be archived instead, with everything kept.",
+      "archiveConfirm": "Archive"
+    },
+    "toast": {
+      "created": "Goal added.",
+      "saved": "Goal saved.",
+      "archived": "Goal archived.",
+      "unarchived": "Goal back in Active.",
+      "deleted": "Goal deleted."
+    },
+    "first": {
+      "title": "Your first goal",
+      "eyebrow": "The last step",
+      "intro": "Written from what matters to you. Two questions are needed; the rest can wait.",
+      "valuesLegend": "Which of your values does this serve?",
+      "valuesHint": "Optional. The ones you tap stay in view while you write.",
+      "ownWords": "In your own words",
+      "becoming": "You want to become",
+      "change": "You'd like to change",
+      "flag": "At the flag",
+      "preview": "Your goal appears here.",
+      "save": "Save my goal",
+      "arrival": {
+        "tile": "Your path has a flag now.",
+        "eyebrow": "Your first goal",
+        "why": "Why it matters",
+        "next": "Next: break it into steps small enough for one sitting.",
+        "home": "Go to Home"
+      },
+      "back": "Back"
+    }
   }
 }
