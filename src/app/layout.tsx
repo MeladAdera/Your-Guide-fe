@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Figtree, IBM_Plex_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
+import localFont from "next/font/local";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
@@ -12,9 +12,33 @@ import "./globals.css";
 
 // Figtree for Latin (the rounded geometric sans of the sign-in reference), IBM
 // Plex Sans Arabic for Arabic, Plex Mono for small labels and numbers.
-const figtree = Figtree({ subsets: ["latin", "latin-ext"], weight: ["400", "500", "600", "700"], variable: "--font-figtree", display: "swap" });
-const plexArabic = IBM_Plex_Sans_Arabic({ subsets: ["arabic", "latin"], weight: ["400", "500", "600"], variable: "--font-plex-arabic", display: "swap" });
-const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
+// Self-hosted from src/app/fonts (OFL, from github.com/google/fonts), cut to the
+// same subsets we used from Google: Figtree latin + latin-ext (variable, 400-700),
+// Plex Arabic arabic + latin, Plex Mono latin. Fetching from Google at build time
+// broke Turbopack whenever Google answered with its `l/font?kit=` URL style.
+const figtree = localFont({
+  src: "./fonts/Figtree-Variable.woff2",
+  weight: "400 700",
+  variable: "--font-figtree",
+  display: "swap",
+});
+const plexArabic = localFont({
+  src: [
+    { path: "./fonts/IBMPlexSansArabic-Regular.woff2", weight: "400" },
+    { path: "./fonts/IBMPlexSansArabic-Medium.woff2", weight: "500" },
+    { path: "./fonts/IBMPlexSansArabic-SemiBold.woff2", weight: "600" },
+  ],
+  variable: "--font-plex-arabic",
+  display: "swap",
+});
+const plexMono = localFont({
+  src: [
+    { path: "./fonts/IBMPlexMono-Regular.woff2", weight: "400" },
+    { path: "./fonts/IBMPlexMono-Medium.woff2", weight: "500" },
+  ],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("app");
