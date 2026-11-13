@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { ProgressDay } from "@/lib/api/types";
+import type { Progress, ProgressDay } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 import { useProgress } from "../api";
 import { weekdayName } from "../week-days";
@@ -21,10 +21,14 @@ type Variant = "tile" | "compact";
  *
  * `tile` fills the mint tile beside the card on a laptop; `compact` is the
  * card at the top of Home on a phone.
+ *
+ * `initial` is the week from a server render. Home's page streams in after
+ * the frame, so without it the server would send the skeleton while the
+ * browser, already holding the week, draws the card: a hydration mismatch.
  */
-export function WeekRhythm({ variant }: { variant: Variant }) {
+export function WeekRhythm({ variant, initial }: { variant: Variant; initial?: Progress }) {
   const t = useTranslations("rhythm");
-  const { data, isPending, isError } = useProgress(7);
+  const { data, isPending, isError } = useProgress(7, initial);
   const compact = variant === "compact";
 
   if (isPending) return <RhythmSkeleton variant={variant} />;

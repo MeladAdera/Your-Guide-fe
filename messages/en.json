@@ -309,9 +309,25 @@
   },
   "home": {
     "title": "Home",
-    "placeholder": "The home screen comes with the next slice. For now the foundation works: account, language and the design system.",
-    "styleguide": "Open the style guide",
-    "signedInAs": "Signed in as {email}"
+    "next": {
+      "eyebrow": "Your next step",
+      "goal": "Goal",
+      "task": "Task",
+      "open": "Open the goal",
+      "nothingOpenTitle": "Make the next step small",
+      "nothingOpenBody": "This goal has no open steps. Name a task, then a step you could finish in one sitting.",
+      "noGoalsTitle": "No active goals right now",
+      "noGoalsBody": "Pick an archived goal back up, or start a new one.",
+      "toGoals": "Go to Goals"
+    },
+    "goals": {
+      "title": "Your goals",
+      "progress": "{done} of {total, plural, one {# task} other {# tasks}} done",
+      "noTasks": "No tasks yet",
+      "allDone": "{total, plural, one {Its one task is done} other {All # tasks done}}",
+      "all": "All goals",
+      "allCount": "All goals ({count})"
+    }
   },
   "styleguide": {
     "title": "Style guide",
