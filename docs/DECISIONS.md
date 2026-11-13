@@ -23,6 +23,12 @@ Dated, so a later reader knows when and why. The backend's own decisions live in
 - In the browser, any 401 from any route dispatches a window event; a listener sends the person to `/sign-in?next=<path>&reason=expired`.
 - `/` is the start-up router from handoff §7: me → onboarding → goals → active session → home.
 
+## 2026-11-13 · Fonts on our own server; server data and shared query keys
+
+- **Fonts are self-hosted** (`src/app/fonts/`, `next/font/local`, OFL files from github.com/google/fonts cut to the subsets we used): `next/font/google` broke the dev server and builds whenever Google answered with its `l/font?kit=` URL style, which Turbopack cannot resolve. Builds no longer reach Google. Not taken: deleting `.next` and hoping Google answers differently.
+- **Server data handed to a component that shares a query key goes in as `placeholderData`, not `initialData`**, when other components on the page read the same key. Seeding the shared cache during the server render changes what those components render on the server but not in the browser, a hydration mismatch (found on Home with the week card, `docs/features/04-home.md` §6.6). `initialData` stays right where one component owns the key, as on the goals and goal pages.
+- **Pages that write nothing can be Server Components end to end** (Home): rendered fresh on each visit, no client queries to keep in step.
+
 ## 2026-11-10 · Build every page now, review later; app-wide pieces from features 1–3
 
 - **Working method changed by the owner:** every remaining page is built and committed in the sign-in look without a design round; the owner reviews and adjusts each page afterwards. Each feature doc ends with "Design choices made without the owner" for that review. (Until then: ideas → owner's pick → design options → owner's pick → build, and no visual commit before the owner had seen it.)

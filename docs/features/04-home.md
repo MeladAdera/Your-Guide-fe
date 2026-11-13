@@ -1,6 +1,6 @@
 # 04 · Home
 
-Status: **spec 2026-11-13** · built in steps after it, each shown running before its commit · owner's design review after the build (§8)
+Status: **built 2026-11-13** (40202c8 spec, ec3315b, 401a1d4, 53a6654, tests and docs after), each step shown to the owner running before its commit · the Playwright paths pass against the local API on phone and laptop · **owner's design review pending** (§8)
 
 ## 1. Job
 
@@ -14,7 +14,7 @@ Rules that apply: **one primary action** (the next step), never a list of chores
 
 Everything is loaded by the server render, so Home opens complete, without a spinner per part:
 
-1. In parallel: `GET /api/sessions/active` (404 `session.none_active` → none), `GET /api/goals`, `GET /api/sessions?days=7`.
+1. In parallel: `GET /api/sessions/active` (404 `session.none_active` → none), `GET /api/goals`, `GET /api/sessions?days=7`, `GET /api/progress?days=7` (for the phone's week card, §6.6).
 2. In parallel: every active goal's tasks (they give each goal's progress line too).
 3. Steps only where the next step is looked for (§3.2), task by task, stopping at the first open step. Usually one or two calls, not every step of every goal.
 
@@ -22,7 +22,7 @@ Everything is loaded by the server render, so Home opens complete, without a spi
 
 In reading order:
 
-1. **Open session banner**, only when a session is open. Running: "A focus session is running" · step title · task and goal names · **Back to the session** (→ `/session`). Stopped and waiting for its review: "Your last session is waiting for its review" · the same names · **Review it**. The review is owed, so the banner comes first (handoff §11).
+1. **Open session banner**, only when a session is open, above everything on both widths (on a phone also above the week card). Running: "A focus session is running" · step title · task and goal names · **Back to the session** (→ `/session`). Stopped and waiting for its review: "Your last session is waiting for its review" · the same names · **Review it**. The review is owed, so the banner comes first (handoff §11). It holds the page's one primary button; while it shows, **Open the goal** below turns to an outline button. Soft green tint, not ink: ink stays the I'm struggling button's alone.
 2. **Your next step**, the one primary action. This is the page heading:
    - "Your next step" (small, above), the **step title** (the heading, large), then "Goal › Task" in muted text.
    - **Open the goal** (primary button) → `/goals/[id]`, where the step sits. Start session joins it in feature 5 (§6.1).
@@ -39,8 +39,8 @@ Removed: the placeholder intro, "Signed in as", the style guide link (the style 
 ```
 Phone (about 400px)                 Laptop (about 1024px)
 +--------------------------+        +--------------------------------+-----------+
-| week (compact mint card) |        | [banner, when open]            | mint tile |
-| [banner, when open]      |        | Your next step                 | this week |
+| [banner, when open]      |        | [banner, when open]            | mint tile |
+| week (compact mint card) |        | Your next step                 | this week |
 | Your next step           |        | Step title (large)             |           |
 | Step title               |        | Goal › Task                    |           |
 | Goal › Task              |        | [Open the goal]                |           |
@@ -54,7 +54,7 @@ Phone (about 400px)                 Laptop (about 1024px)
 
 - **Loading**: a `loading.tsx` skeleton in the card's shape (heading bar, a button, three rows) while the server render runs on navigation.
 - **Error**: the app's error page (`src/app/error.tsx`) with its retry, as everywhere else; the week tile keeps its own quiet empty state.
-- **Success elsewhere**: ticking a step on a goal page and coming back shows the new next step (the server render runs again; the query keys are shared, §5).
+- **Success elsewhere**: ticking a step on a goal page and coming back shows the new next step: Home is rendered on the server on every visit.
 
 ## 5. API integration
 
@@ -67,7 +67,7 @@ Phone (about 400px)                 Laptop (about 1024px)
 | `GET /api/tasks/:taskId/steps` | server render, task by task until an open step | the next step | |
 | `GET /api/progress?days=7` | the week tile, as now | this week | (the tile's own) |
 
-Query keys: the same as the goals and goal pages (`["goals", "active"]`, `["goals", id, "tasks"]`, `["tasks", taskId, "steps"]`), plus `["sessions", "active"]` and `["sessions", 7]`, filled from the server render as `initialData`. Every write on the goal pages already invalidates these keys. Home itself writes nothing.
+No query keys of its own: Home writes nothing and is rendered on the server on every visit, so its parts are Server Components fed by the page (`src/features/home/components/`). The rules are pure functions in `src/features/home/next-step.ts`. The week card keeps its key `["progress", 7]`.
 
 ## 6. Decisions
 
@@ -76,12 +76,14 @@ Query keys: the same as the goals and goal pages (`["goals", "active"]`, `["goal
 3. **This week is the existing week rhythm**, not a second set of tiles: it already shows the headline number (struggled and continued), with steps and minutes, and it already sits on Home.
 4. **I'm struggling is not repeated on the card**: the frame already keeps it one tap away on every page.
 5. **The progress line counts tasks, not steps**: the tasks are loaded for every goal anyway, and steps for every task of every goal would multiply the calls on the most visited page.
+6. **The week card gets the server's week as a placeholder, not as cache data.** Home's `loading.tsx` makes the page stream in after the frame; the phone's week card then hydrated after the laptop tile had already fetched the week, so the server sent a skeleton and the browser drew the card (a hydration mismatch). Seeding the shared query cache from the server render was tried and moved the mismatch to the laptop tile. `useProgress(days, serverData)` uses it as `placeholderData`, which no other component sees.
+7. **Server Components only, no client queries on Home** (the spec planned `initialData` per query key): nothing on Home changes while it is open, and every visit renders it fresh. Feature 5 adds the client side when Start session arrives. Not taken: a `sessionsApi` client module now; it comes with the session screen that needs it.
 
 ## 7. Tests
 
 - Unit, `src/features/home/next-step.test.ts`: goal order (last session first, then oldest), skipping done tasks and goals with no open step, the "nothing open" and "no goals" cases, the progress line.
-- Playwright, `e2e/home.spec.ts` (needs the API), phone and laptop: a fresh account with one goal shows "Make the next step small"; after a task and two steps it shows the first step; ticking it moves Home to the second; **Open the goal** lands on the goal page; with every goal archived it shows "No active goals right now"; an open session (started through the API) shows the banner.
-- By hand: English and Arabic, phone and laptop, light and dark.
+- Playwright, `e2e/home.spec.ts` (needs the API), phone and laptop: a goal with no tasks shows "Make the next step small"; after a task and two steps it shows the first step and "0 of 1 task done"; **Open the goal**, tick the step there, and Home shows the second; a session on a newer goal puts that goal and its step first. Second path: a running session shows its banner, a stopped one "Review it", a reviewed one none; with every goal archived, "No active goals right now" and **Go to Goals**.
+- By hand, from screenshots on 2026-11-13: English and Arabic (RTL), phone and laptop, light and dark, every state above, no page errors.
 
 ## 8. Design choices made without the owner (for the review)
 
@@ -89,3 +91,10 @@ Query keys: the same as the goals and goal pages (`["goals", "active"]`, `["goal
 - The banner's wording and its place above everything.
 - Goals as rows with a progress line, at most five on Home.
 - Copy of the "nothing open" and "no goals" cards.
+- The banner's soft green tint, and Open the goal turning to outline while it shows.
+- When the open session is on the next step, the same step shows in the banner and in the card.
+
+## 9. Follow-ups
+
+- Feature 5: Start session on the next-step card (and on the goal page's steps); the banner's links then reach a real session screen.
+- The Arabic copy of Home waits for the owner's review with the rest.
