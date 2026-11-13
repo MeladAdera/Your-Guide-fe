@@ -320,6 +320,12 @@
       "noGoalsBody": "Pick an archived goal back up, or start a new one.",
       "toGoals": "Go to Goals"
     },
+    "session": {
+      "running": "A focus session is running",
+      "awaiting": "Your last session is waiting for its review",
+      "back": "Back to the session",
+      "review": "Review it"
+    },
     "goals": {
       "title": "Your goals",
       "progress": "{done} of {total, plural, one {# task} other {# tasks}} done",

@@ -7,9 +7,10 @@ import type { NextStep } from "../next-step";
 /**
  * Home's one primary action (docs/features/04-home.md §3.2): the next step as
  * the page heading, where it sits, and the way to it. Start session joins the
- * button with feature 5.
+ * button with feature 5. `quiet` turns the button to outline while an open
+ * session's banner holds the page's one primary action.
  */
-export async function NextStepCard({ next }: { next: NextStep }) {
+export async function NextStepCard({ next, quiet = false }: { next: NextStep; quiet?: boolean }) {
   const t = await getTranslations("home.next");
 
   const href = next.kind === "no-goals" ? "/goals" : `/goals/${next.goal.id}`;
@@ -58,7 +59,7 @@ export async function NextStepCard({ next }: { next: NextStep }) {
         </>
       )}
 
-      <Button asChild className="mt-6 h-12 w-full rounded-[10px] px-5 text-base sm:w-auto">
+      <Button asChild variant={quiet ? "outline" : "default"} className="mt-6 h-12 w-full rounded-[10px] px-5 text-base sm:w-auto">
         <Link href={href}>
           {action} <ArrowRight aria-hidden className="rtl:rotate-180" />
         </Link>

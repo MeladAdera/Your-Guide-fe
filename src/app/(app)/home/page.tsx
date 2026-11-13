@@ -4,8 +4,9 @@ import { GoalsSummary } from "@/features/home/components/goals-summary";
 import { NextStepCard } from "@/features/home/components/next-step-card";
 import { findNextStep, orderGoals } from "@/features/home/next-step";
 import { WeekRhythm } from "@/features/progress/components/week-rhythm";
-import { serverApi } from "@/lib/api/server";
-import type { EndedSession, Goal, Progress, Step, Task } from "@/lib/api/types";
+import { SessionBanner } from "@/features/home/components/session-banner";
+import { serverApi, serverApiOrNull } from "@/lib/api/server";
+import type { EndedSession, Goal, Progress, Session, Step, Task } from "@/lib/api/types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("home");
@@ -18,7 +19,8 @@ export async function generateMetadata(): Promise<Metadata> {
  * every goal's tasks, then steps only until the first open one is found.
  */
 export default async function HomePage() {
-  const [goals, recent, week] = await Promise.all([
+  const [session, goals, recent, week] = await Promise.all([
+    serverApiOrNull<Session>("/api/sessions/active", ["session.none_active"]),
     serverApi<Goal[]>("/api/goals"),
     serverApi<EndedSession[]>("/api/sessions", { query: { days: 7 } }),
     serverApi<Progress>("/api/progress", { query: { days: 7 } }),
@@ -31,11 +33,13 @@ export default async function HomePage() {
 
   return (
     <div className="grid gap-6 lg:gap-8">
+      {/* An owed review comes before everything, even the week. */}
+      {session && <SessionBanner session={session} />}
       {/* Phones have no tile beside the card, so the week sits at the top of Home. */}
       <div className="lg:hidden">
         <WeekRhythm variant="compact" initial={week} />
       </div>
-      <NextStepCard next={next} />
+      <NextStepCard next={next} quiet={session !== null} />
       <GoalsSummary goals={ordered} tasksByGoal={tasksByGoal} />
     </div>
   );
